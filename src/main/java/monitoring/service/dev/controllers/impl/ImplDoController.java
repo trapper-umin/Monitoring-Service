@@ -1,6 +1,6 @@
-package meter.reading.service.dev.controllers.impl;
+package monitoring.service.dev.controllers.impl;
 
-import meter.reading.service.dev.controllers.interfaces.IDoController;
+import monitoring.service.dev.controllers.interfaces.IDoController;
 
 public abstract class ImplDoController implements IDoController {
     @Override

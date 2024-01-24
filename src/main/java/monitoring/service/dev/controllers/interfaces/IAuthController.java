@@ -1,4 +1,4 @@
-package meter.reading.service.dev.controllers.interfaces;
+package monitoring.service.dev.controllers.interfaces;
 
 public interface IAuthController {
 

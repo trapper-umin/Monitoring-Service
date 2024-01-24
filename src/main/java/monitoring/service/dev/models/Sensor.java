@@ -1,7 +1,7 @@
-package meter.reading.service.dev.models;
+package monitoring.service.dev.models;
 
 import lombok.*;
-import meter.reading.service.dev.common.SensorType;
+import monitoring.service.dev.common.SensorType;
 
 @Getter
 @Setter
@@ -13,4 +13,6 @@ public class Sensor {
     private int id;
 
     private SensorType type;
+
+
 }

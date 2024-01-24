@@ -1,6 +1,6 @@
-package meter.reading.service.dev.controllers.impl;
+package monitoring.service.dev.controllers.impl;
 
-import meter.reading.service.dev.controllers.interfaces.IAdminController;
+import monitoring.service.dev.controllers.interfaces.IAdminController;
 
 public abstract class ImplAdminController implements IAdminController {
     @Override

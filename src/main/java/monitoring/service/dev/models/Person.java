@@ -1,7 +1,7 @@
-package meter.reading.service.dev.models;
+package monitoring.service.dev.models;
 
 import lombok.*;
-import meter.reading.service.dev.common.Role;
+import monitoring.service.dev.common.Role;
 
 @Getter
 @Setter

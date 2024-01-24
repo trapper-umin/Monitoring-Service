@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>dev.ylab.com</groupId>
-	<artifactId>Meter-Reading-Service-Dev</artifactId>
+	<artifactId>Monitoring-Service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Meter-Reading-Service</name>
+	<name>Monitoring-Service</name>
 	<description>web service for providing readings of heating, hot and cold water meters</description>
 
 	<properties>
@@ -34,7 +34,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>meter.reading.service.dev.MeterReadingServiceCLI</mainClass>
+							<mainClass>monitoring.service.dev.MonitoringServiceCLI</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

@@ -1,4 +1,4 @@
-package meter.reading.service.dev.common;
+package monitoring.service.dev.common;
 
 public enum SensorType {
 
