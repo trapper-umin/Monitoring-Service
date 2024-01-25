@@ -10,8 +10,8 @@ public abstract class ImplAuthController implements IAuthController {
     AuthService service = AuthService.getInstance();
 
     @Override
-    public void registration(CredentialsDTO credentials) {
-        service.registration(credentials);
+    public Person registration(CredentialsDTO credentials) {
+        return service.registration(credentials);
     }
 
     @Override

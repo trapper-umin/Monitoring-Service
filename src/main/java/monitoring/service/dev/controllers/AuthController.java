@@ -10,7 +10,7 @@ public class AuthController extends ImplAuthController {
 
     public static AuthController getInstance(){
         if(instance==null){
-            instance=new AuthController();
+            instance = new AuthController();
         }
         return instance;
     }

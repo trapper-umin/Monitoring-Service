@@ -28,12 +28,12 @@ public class AuthService {
     PersonPasswordValidation ppValidation = PersonPasswordValidation.getInstance();
     Repository repository = Repository.getInstance();
 
-    public void registration(CredentialsDTO credentials) {
+    public Person registration(CredentialsDTO credentials) {
 
         String username = credentials.getUsername();
         puValidation.valid(username);
 
-       String password = credentials.getPassword();
+        String password = credentials.getPassword();
         ppValidation.valid(password);
 
         Person person = Person.builder()
@@ -48,6 +48,8 @@ public class AuthService {
                 .build();
 
         repository.registration(person);
+
+        return person;
     }
 
     public Person authentication(CredentialsDTO credentials) {

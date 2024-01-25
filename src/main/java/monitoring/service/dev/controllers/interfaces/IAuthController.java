@@ -5,7 +5,7 @@ import monitoring.service.dev.models.Person;
 
 public interface IAuthController {
 
-    void registration(CredentialsDTO credentials);
+    Person registration(CredentialsDTO credentials);
 
     Person authentication(CredentialsDTO credentials);
 }

@@ -1,6 +1,8 @@
 package monitoring.service.dev.repositories;
 
 import monitoring.service.dev.common.Role;
+import monitoring.service.dev.dtos.MeterReadingDTO;
+import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.models.MeterReading;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Sensor;
@@ -49,6 +51,11 @@ public class Repository {
         return personToSensors.keySet().stream()
                 .filter(person -> person.getUsername().equals(username))
                 .findFirst();
+    }
+
+    public Map<SensorDTO, MeterReadingDTO> getCurrentReadings(Person credentials) {
+
+        return null;
     }
 }
 
