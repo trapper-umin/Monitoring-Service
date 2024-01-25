@@ -1,8 +1,11 @@
 package monitoring.service.dev.controllers.interfaces;
 
+import monitoring.service.dev.dtos.CredentialsDTO;
+import monitoring.service.dev.models.Person;
+
 public interface IAuthController {
 
-    void registration(String username, String password);
+    void registration(CredentialsDTO credentials);
 
-    void authentication(String username, String password);
+    Person authentication(CredentialsDTO credentials);
 }

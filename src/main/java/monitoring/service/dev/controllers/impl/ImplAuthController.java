@@ -1,19 +1,21 @@
 package monitoring.service.dev.controllers.impl;
 
 import monitoring.service.dev.controllers.interfaces.IAuthController;
-import monitoring.service.dev.services.PeopleService;
+import monitoring.service.dev.dtos.CredentialsDTO;
+import monitoring.service.dev.models.Person;
+import monitoring.service.dev.services.AuthService;
 
 public abstract class ImplAuthController implements IAuthController {
 
-    PeopleService service = PeopleService.getInstance();
+    AuthService service = AuthService.getInstance();
 
     @Override
-    public void registration(String username, String password) {
-        service.registration(username,password);
+    public void registration(CredentialsDTO credentials) {
+        service.registration(credentials);
     }
 
     @Override
-    public void authentication(String username, String password) {
-
+    public Person authentication(CredentialsDTO credentials) {
+        return service.authentication(credentials);
     }
 }
