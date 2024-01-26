@@ -34,7 +34,7 @@ public class MonitoringServiceCLI {
                     System.out.println("Exiting program...");
                     return;
                 }
-                default -> System.out.println("Unknown command. Type '/help' for available commands.");
+                default -> System.out.println("Unknown command.");
             }
         }
     }
@@ -99,6 +99,8 @@ public class MonitoringServiceCLI {
     }
 
     private static void handleSession(Person person){
+        if(person==null) return;
+
         Role role = person.getRole();
 
         if (role == Role.USER) {
@@ -175,6 +177,7 @@ public class MonitoringServiceCLI {
                  / /  / / /_/ / / / / / /_/ /_/ / /  / / / / / /_/ /   ___/ /  __/ /   | |/ / / /__/  __/
                 /_/  /_/\\____/_/ /_/_/\\__/\\____/_/  /_/_/ /_/\\__, /   /____/\\___/_/    |___/_/\\___/\\___/\s
                                                             /____/                                      \s
+                     :: Monitoring-Service By trapper for Y_LAB ::                   (v1.0.5)                          
                 """);
 
         System.out.println(
@@ -190,7 +193,6 @@ public class MonitoringServiceCLI {
                         "+----------------------------------------------------------+"
         );
     }
-
 
     private static void showUserMenu() {
         System.out.println(

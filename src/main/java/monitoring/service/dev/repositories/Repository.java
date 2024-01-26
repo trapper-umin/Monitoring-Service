@@ -8,10 +8,7 @@ import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Sensor;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class Repository {
     private static Repository instance;
@@ -53,9 +50,26 @@ public class Repository {
                 .findFirst();
     }
 
-    public Map<SensorDTO, MeterReadingDTO> getCurrentReadings(Person credentials) {
+    public Map<Sensor, MeterReading> getCurrentReadings(Person credentials) {
+        Map<Sensor, MeterReading> currentReadings = new HashMap<>();
 
-        return null;
+        List<Sensor> sensors = personToSensors.get(credentials);
+        if (sensors != null) {
+            for (Sensor sensor : sensors) {
+                List<MeterReading> readings = sensorToReadings.get(sensor);
+                if (readings != null) {
+                    MeterReading latestReading = readings.stream()
+                            .filter(reading -> reading.getDate().getYear() == LocalDateTime.now().getYear() &&
+                                    reading.getDate().getMonth() == LocalDateTime.now().getMonth())
+                            .max(Comparator.comparing(MeterReading::getDate))
+                            .orElse(null);
+                    if (latestReading != null) {
+                        currentReadings.put(sensor, latestReading);
+                    }
+                }
+            }
+        }
+        return currentReadings;
     }
 }
 
