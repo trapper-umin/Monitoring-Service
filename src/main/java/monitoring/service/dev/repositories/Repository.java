@@ -1,16 +1,19 @@
 package monitoring.service.dev.repositories;
 
 import monitoring.service.dev.common.Role;
+import monitoring.service.dev.common.SensorType;
 import monitoring.service.dev.dtos.MeterReadingDTO;
 import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.models.MeterReading;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Sensor;
+import monitoring.service.dev.utils.exceptions.MeterReadingExistsException;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.*;
 
-public class Repository {
+public class Repository implements IPeopleRepository{
     private static Repository instance;
     Map<Person, List<Sensor>> personToSensors;
     Map<Sensor, List<MeterReading>> sensorToReadings;
@@ -30,7 +33,31 @@ public class Repository {
                 .role(Role.ADMIN)
                 .build();
 
-        personToSensors.put(person,null);
+        Sensor sensor = Sensor.builder()
+                .id(1)
+                .type(SensorType.COLD_WATER_METERS)
+                .build();
+
+        Sensor sensor2 = Sensor.builder()
+                .id(1)
+                .type(SensorType.HOT_WATER_METERS)
+                .build();
+
+        MeterReading meterReading = MeterReading.builder()
+                .id(1)
+                .indication(100)
+                .date(LocalDateTime.now())
+                .build();
+
+        MeterReading meterReading2 = MeterReading.builder()
+                .id(1)
+                .indication(200)
+                .date(LocalDateTime.now())
+                .build();
+
+        personToSensors.put(person,List.of(sensor, sensor2));
+        sensorToReadings.put(sensor,List.of(meterReading));
+        sensorToReadings.put(sensor2,List.of(meterReading2));
     }
 
     public static Repository getInstance() {
@@ -70,6 +97,39 @@ public class Repository {
             }
         }
         return currentReadings;
+    }
+
+    public void submitReading(Person person, Sensor sensor, MeterReading meterReading) throws MeterReadingExistsException {
+        // Проверяем, существует ли список сенсоров для данного пользователя
+        List<Sensor> sensors = personToSensors.get(person);
+        if (sensors == null) {
+            sensors = new ArrayList<>();
+            personToSensors.put(person, sensors);
+        }
+
+        // Добавляем сенсор, если он еще не был добавлен
+        if (!sensors.contains(sensor)) {
+            sensors.add(sensor);
+        }
+
+        // Проверяем, существует ли список показаний для данного сенсора
+        List<MeterReading> readings = sensorToReadings.get(sensor);
+        if (readings == null) {
+            readings = new ArrayList<>();
+            sensorToReadings.put(sensor, readings);
+        } else {
+            // Проверяем, существуют ли уже показания для данного месяца
+            YearMonth submittedMonth = YearMonth.from(meterReading.getDate());
+            for (MeterReading existingReading : readings) {
+                YearMonth existingMonth = YearMonth.from(existingReading.getDate());
+                if (submittedMonth.equals(existingMonth)) {
+                    throw new MeterReadingExistsException("Meter reading for this month already exists.");
+                }
+            }
+        }
+
+        // Добавляем показания к сенсору
+        readings.add(meterReading);
     }
 }
 

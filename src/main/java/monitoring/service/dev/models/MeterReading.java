@@ -13,7 +13,7 @@ public class MeterReading {
 
     private int id;
 
-    private int indication;
+    private double indication;
 
     private LocalDateTime date;
 }

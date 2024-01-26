@@ -1,11 +1,13 @@
 package monitoring.service.dev.utils.validations;
 
+import monitoring.service.dev.dtos.CredentialsDTO;
 import monitoring.service.dev.repositories.Repository;
 import monitoring.service.dev.utils.exceptions.NotValidException;
+import monitoring.service.dev.utils.validations.common.IValidator;
 
 import java.util.Objects;
 
-public class PersonUsernameValidation {
+public class PersonUsernameValidation implements IValidator<CredentialsDTO> {
 
     private static PersonUsernameValidation instance;
 
@@ -20,7 +22,9 @@ public class PersonUsernameValidation {
 
     Repository repository = Repository.getInstance();
 
-    public void valid(String username){
+    public void valid(CredentialsDTO credentials){
+        String username = credentials.getUsername();
+
         Objects.requireNonNull(username, "username should not be null");
 
         String trimmedUsername = username.trim();

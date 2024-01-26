@@ -1,17 +1,27 @@
 package monitoring.service.dev;
 
 import monitoring.service.dev.common.Role;
+import monitoring.service.dev.common.SensorType;
 import monitoring.service.dev.controllers.AuthController;
+import monitoring.service.dev.controllers.DoController;
 import monitoring.service.dev.dtos.CredentialsDTO;
+import monitoring.service.dev.dtos.MeterReadingDTO;
+import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.models.Person;
+import monitoring.service.dev.services.DoService;
+import monitoring.service.dev.utils.exceptions.MeterReadingExistsException;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Scanner;
 
 public class MonitoringServiceCLI {
     private static final Scanner keyboard = new Scanner(System.in);
     private static final AuthController auth = AuthController.getInstance();
+    private static final DoController doService = DoController.getInstance();
 
     public static void main(String[] args) {
         showAvailableCommands();
@@ -116,43 +126,66 @@ public class MonitoringServiceCLI {
             String command = keyboard.nextLine();
 
             switch (command) {
-                case "/submitReading":
-                    // Логика подачи показаний
-                    break;
-                case "/getCurrentReadings":
-                    // Логика получения актуальных показаний
-                    break;
-                case "/getMonthlyReadings":
+                case "/submitReading" -> {
+                    try {
+                        System.out.println("for submitting you need tap type sensor 1 - HOT 2 - COLD");
+                        int type = keyboard.nextInt();
+                        SensorDTO sensorDTO = SensorDTO.builder()
+                                .type(type==1 ? SensorType.HOT_WATER_METERS : SensorType.COLD_WATER_METERS)
+                                .build();
+
+                        System.out.println("enter indication");
+                        double indication = keyboard.nextDouble();
+
+                        System.out.println("enter month and year");
+                        String date = keyboard.nextLine();
+                        //TODO
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+                        LocalDate dateTime = LocalDate.parse(date, formatter);
+                        MeterReadingDTO meterReadingDTO = MeterReadingDTO.builder()
+                                .indication(indication)
+                                .date(dateTime.atStartOfDay())
+                                .build();
+
+                        doService.submitReading(person,sensorDTO,meterReadingDTO);
+                        System.out.println("Success!");
+                    }catch (NotValidException | MeterReadingExistsException e){
+                        System.out.println(e.getMessage());
+                    }
+                }
+                case "/getCurrentReadings" -> {
+                    Map<SensorDTO, MeterReadingDTO> readings = doService.getCurrentReadings(person);
+                    if (readings.isEmpty()) {
+                        System.out.println("There are no current indicators");
+                    } else {
+                        for (Map.Entry<SensorDTO, MeterReadingDTO> entry : readings.entrySet()) {
+                            System.out.println(entry.getKey().getType() + " " + entry.getValue().getIndication()
+                                    + " " + entry.getValue().getDate());
+                        }
+                    }
+                }
+                case "/getMonthlyReadings" -> {
                     // Логика получения показаний за определенный месяц
-                    break;
-                case "/viewHistory":
+                }
+                case "/viewHistory" -> {
                     if (role == Role.ADMIN) {
                         // Логика просмотра истории подачи показаний
                     } else {
                         System.out.println("403 FORBIDDEN (Unauthorized action)");
                     }
-                    break;
-                case "/userRightsControl":
+                }
+                case "/userRightsControl", "/audit" -> {
                     if (role == Role.ADMIN) {
-                        // Логика контроля прав пользователя
+                        // Логика контроля прав пользователя или аудита действий пользователя
                     } else {
                         System.out.println("403 FORBIDDEN (Unauthorized action)");
                     }
-                    break;
-                case "/audit":
-                    if (role == Role.ADMIN) {
-                        // Логика аудита действий пользователя
-                    } else {
-                        System.out.println("403 FORBIDDEN (Unauthorized action)");
-                    }
-                    break;
-                case "/logout":
+                }
+                case "/logout" -> {
                     isSessionActive = false;
                     System.out.println("Logging out...");
-                    break;
-                default:
-                    System.out.println("Unknown command.");
-                    break;
+                }
+                default -> System.out.println("Unknown command.");
             }
         }
     }
@@ -177,7 +210,7 @@ public class MonitoringServiceCLI {
                  / /  / / /_/ / / / / / /_/ /_/ / /  / / / / / /_/ /   ___/ /  __/ /   | |/ / / /__/  __/
                 /_/  /_/\\____/_/ /_/_/\\__/\\____/_/  /_/_/ /_/\\__, /   /____/\\___/_/    |___/_/\\___/\\___/\s
                                                             /____/                                      \s
-                     :: Monitoring-Service By trapper for Y_LAB ::                   (v1.0.5)                          
+                     :: Monitoring-Service By trapper for Y_LAB ::                   (v1.0.7)                          
                 """);
 
         System.out.println(

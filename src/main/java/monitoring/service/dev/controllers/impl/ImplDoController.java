@@ -23,7 +23,7 @@ public abstract class ImplDoController implements IDoController {
     }
 
     @Override
-    public void submitReading(SensorDTO sensor) {
-        service.submitReading(sensor);
+    public void submitReading(Person credentials, SensorDTO sensor, MeterReadingDTO meter) {
+        service.submitReading(credentials, sensor, meter);
     }
 }

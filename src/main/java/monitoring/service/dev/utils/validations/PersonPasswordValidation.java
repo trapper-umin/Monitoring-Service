@@ -1,8 +1,10 @@
 package monitoring.service.dev.utils.validations;
 
+import monitoring.service.dev.dtos.CredentialsDTO;
 import monitoring.service.dev.utils.exceptions.NotValidException;
+import monitoring.service.dev.utils.validations.common.IValidator;
 
-public class PersonPasswordValidation {
+public class PersonPasswordValidation implements IValidator<CredentialsDTO> {
 
     private static PersonPasswordValidation instance;
 
@@ -17,7 +19,9 @@ public class PersonPasswordValidation {
         return instance;
     }
 
-    public void valid(String password){
+    public void valid(CredentialsDTO credentials){
+        String password = credentials.getPassword();
+
         if (password == null || password.trim().isEmpty()) {
             throw new NotValidException("password should not be empty");
         }

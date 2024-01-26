@@ -3,7 +3,9 @@ package monitoring.service.dev.services;
 import monitoring.service.dev.common.Role;
 import monitoring.service.dev.dtos.CredentialsDTO;
 import monitoring.service.dev.models.Person;
+import monitoring.service.dev.repositories.IPeopleRepository;
 import monitoring.service.dev.repositories.Repository;
+import monitoring.service.dev.repositories.RepositoryFactory;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.validations.PersonPasswordValidation;
@@ -12,6 +14,10 @@ import monitoring.service.dev.utils.validations.PersonUsernameValidation;
 import java.time.LocalDateTime;
 
 public class AuthService {
+
+    private static final PersonUsernameValidation puValidation = PersonUsernameValidation.getInstance();
+    private static final PersonPasswordValidation ppValidation = PersonPasswordValidation.getInstance();
+    private static final IPeopleRepository repository = RepositoryFactory.getRepository();
 
     private static AuthService instance;
 
@@ -24,17 +30,13 @@ public class AuthService {
         return instance;
     }
 
-    PersonUsernameValidation puValidation = PersonUsernameValidation.getInstance();
-    PersonPasswordValidation ppValidation = PersonPasswordValidation.getInstance();
-    Repository repository = Repository.getInstance();
-
     public Person registration(CredentialsDTO credentials) {
 
         String username = credentials.getUsername();
-        puValidation.valid(username);
+        puValidation.valid(credentials);
 
         String password = credentials.getPassword();
-        ppValidation.valid(password);
+        ppValidation.valid(credentials);
 
         Person person = Person.builder()
                 .username(username)

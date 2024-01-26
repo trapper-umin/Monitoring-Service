@@ -2,6 +2,7 @@ package monitoring.service.dev.controllers.interfaces;
 
 import monitoring.service.dev.dtos.MeterReadingDTO;
 import monitoring.service.dev.dtos.SensorDTO;
+import monitoring.service.dev.models.MeterReading;
 import monitoring.service.dev.models.Person;
 
 import java.util.List;
@@ -13,6 +14,6 @@ public interface IDoController {
 
     Map<SensorDTO, MeterReadingDTO> getMonthlyReadings(Person credentials, String month);
 
-    void submitReading(SensorDTO sensor);
+    void submitReading(Person credentials, SensorDTO sensor, MeterReadingDTO meter);
 
 }
