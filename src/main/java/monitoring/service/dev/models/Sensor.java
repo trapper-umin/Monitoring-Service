@@ -3,6 +3,8 @@ package monitoring.service.dev.models;
 import lombok.*;
 import monitoring.service.dev.common.SensorType;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -10,9 +12,7 @@ import monitoring.service.dev.common.SensorType;
 @NoArgsConstructor
 public class Sensor {
 
-    private int id;
-
     private SensorType type;
 
-
+    List<MeterReading> readings;
 }

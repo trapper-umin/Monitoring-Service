@@ -4,6 +4,7 @@ import lombok.*;
 import monitoring.service.dev.common.Role;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +26,8 @@ public class Person {
 
     private LocalDateTime updatedAt;
 
+    private List<Sensor> sensors;
+
     private Role role;
 
     private Person(Builder builder) {
@@ -35,6 +38,7 @@ public class Person {
         this.age = builder.age;
         this.createdAt = builder.createdAt;
         this.updatedAt = builder.updatedAt;
+        this.sensors=builder.sensors;
         this.role = builder.role;
     }
 
@@ -50,6 +54,8 @@ public class Person {
         private int age;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
+
+        private List<Sensor> sensors;
         private Role role;
 
         public Person build(){
@@ -88,6 +94,11 @@ public class Person {
 
         public Builder updatedAt(LocalDateTime updatedAt) {
             this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public Builder sensors(List<Sensor> sensors){
+            this.sensors=sensors;
             return this;
         }
 

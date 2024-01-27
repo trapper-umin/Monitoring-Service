@@ -1,17 +1,16 @@
 package monitoring.service.dev.models;
 
 import lombok.*;
+import monitoring.service.dev.dtos.requests.CredentialsDTO;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class MeterReading {
+@NoArgsConstructor
+public class Audit {
 
-    private double indication;
-
-    private LocalDateTime date;
+    private String log;
 }

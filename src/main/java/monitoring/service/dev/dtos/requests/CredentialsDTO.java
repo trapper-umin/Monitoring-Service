@@ -1,7 +1,11 @@
-package monitoring.service.dev.dtos;
+package monitoring.service.dev.dtos.requests;
 
 import lombok.*;
+import monitoring.service.dev.common.Role;
+import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.dtos.common.CommonDTO;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,4 +17,8 @@ public class CredentialsDTO implements CommonDTO {
     private String username;
 
     private String password;
+
+    List<SensorDTO> sensors;
+
+    private Role role;
 }

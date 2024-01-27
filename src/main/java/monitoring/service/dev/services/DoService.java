@@ -1,30 +1,24 @@
 package monitoring.service.dev.services;
 
-import monitoring.service.dev.dtos.MeterReadingDTO;
 import monitoring.service.dev.dtos.SensorDTO;
-import monitoring.service.dev.models.MeterReading;
+import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Sensor;
 import monitoring.service.dev.repositories.IPeopleRepository;
-import monitoring.service.dev.repositories.Repository;
 import monitoring.service.dev.repositories.RepositoryFactory;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
-import monitoring.service.dev.utils.mappers.MeterReadingMapper;
-import monitoring.service.dev.utils.mappers.SensorAndMeterReadingMapMapper;
-import monitoring.service.dev.utils.mappers.SensorMapper;
+import monitoring.service.dev.utils.mappers.*;
 import monitoring.service.dev.utils.validations.MeterReadingIndicationValidation;
 import org.mapstruct.factory.Mappers;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class DoService {
 
     private final static IPeopleRepository repository = RepositoryFactory.getRepository();
     private final static MeterReadingIndicationValidation mriValidation = MeterReadingIndicationValidation.getInstance();
-    private final static SensorAndMeterReadingMapMapper mapper = Mappers.getMapper(SensorAndMeterReadingMapMapper.class);
-    private final static SensorMapper mapperForSensor = Mappers.getMapper(SensorMapper.class);
-    private final static MeterReadingMapper mapperForReading = Mappers.getMapper(MeterReadingMapper.class);
+    private final static SensorListMapper mapperForSensorList = Mappers.getMapper(SensorListMapper.class);
+    private final static PersonMapper mapperForPerson = Mappers.getMapper(PersonMapper.class);
 
     private static DoService instance;
 
@@ -37,25 +31,27 @@ public class DoService {
         return instance;
     }
 
-    public Map<SensorDTO, MeterReadingDTO> getCurrentReadings(Person credentials){
-        repository.findByUsername(credentials.getUsername())
+    public List<SensorDTO> getCurrentReadings(CredentialsDTO credentials){
+        Person person = repository.findByUsername(credentials.getUsername())
                 .orElseThrow(() -> new NotFoundException("user with username '"+credentials.getUsername()+"' was not found"));
 
-        Map<Sensor, MeterReading> currentReadings = repository.getCurrentReadings(credentials);
+        List<Sensor> currentReadings = repository.getCurrentReadings(person);
 
-        return mapper.convertToDtoMap(currentReadings);
+        return mapperForSensorList.convertToSensorDTOList(currentReadings);
     }
 
-    public Map<SensorDTO, MeterReadingDTO> getMonthlyReadings(Person person, String month){
+    public List<SensorDTO> getMonthlyReadings(CredentialsDTO credentials, String month, String year){
+        Person person = repository.findByUsername(credentials.getUsername())
+                .orElseThrow(() -> new NotFoundException("user with username '"+credentials.getUsername()+"' was not found"));
 
-        return null;
+        List<Sensor> monthlyReadings = repository.getMonthlyReadings(person, month, year);
+
+        return mapperForSensorList.convertToSensorDTOList(monthlyReadings);
     }
 
-    public void submitReading(Person credentials, SensorDTO sensor, MeterReadingDTO reading) {
-        mriValidation.valid(reading);
+    public void submitReading(CredentialsDTO credentials) {
+        mriValidation.valid(credentials.getSensors().get(0).getReadings().get(0));
 
-        repository.submitReading(credentials,
-                mapperForSensor.convertToSensor(sensor),
-                mapperForReading.convertToMeterReading(reading));
+        repository.submitReading(mapperForPerson.convertToPerson(credentials));
     }
 }

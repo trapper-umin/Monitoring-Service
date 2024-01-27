@@ -1,7 +1,7 @@
 package monitoring.service.dev.utils.validations;
 
-import monitoring.service.dev.dtos.CredentialsDTO;
-import monitoring.service.dev.repositories.Repository;
+import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.repositories.PeopleRepository;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.validations.common.IValidator;
 
@@ -20,7 +20,7 @@ public class PersonUsernameValidation implements IValidator<CredentialsDTO> {
         return instance;
     }
 
-    Repository repository = Repository.getInstance();
+    PeopleRepository peopleRepository = PeopleRepository.getInstance();
 
     public void valid(CredentialsDTO credentials){
         String username = credentials.getUsername();
@@ -37,7 +37,7 @@ public class PersonUsernameValidation implements IValidator<CredentialsDTO> {
         if(!username.matches("[a-zA-Z0-9]+")){
             throw new NotValidException("username should only contain Latin letters and digits");
         }
-        boolean isUsernameTaken = repository.findByUsername(username).isPresent();
+        boolean isUsernameTaken = peopleRepository.findByUsername(username).isPresent();
         if(isUsernameTaken) {
             throw new NotValidException("username should be unique");
         }

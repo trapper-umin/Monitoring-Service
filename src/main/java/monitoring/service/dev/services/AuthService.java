@@ -1,10 +1,9 @@
 package monitoring.service.dev.services;
 
 import monitoring.service.dev.common.Role;
-import monitoring.service.dev.dtos.CredentialsDTO;
+import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IPeopleRepository;
-import monitoring.service.dev.repositories.Repository;
 import monitoring.service.dev.repositories.RepositoryFactory;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
@@ -12,6 +11,7 @@ import monitoring.service.dev.utils.validations.PersonPasswordValidation;
 import monitoring.service.dev.utils.validations.PersonUsernameValidation;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class AuthService {
 
@@ -30,6 +30,17 @@ public class AuthService {
         return instance;
     }
 
+    /**
+     * Registers a new person in the system using the provided credentials.
+     * The method performs validation of the username and password using
+     * defined validation rules. It then creates a new Person object with
+     * default values for first name, last name, age, and an empty list of sensors.
+     * The new person is assigned the role of USER.
+     *
+     * @param credentials The credentials object containing the username and password.
+     * @return The newly created Person object with registered details.
+     * @throws NotValidException if the provided credentials do not meet the validation criteria.
+     */
     public Person registration(CredentialsDTO credentials) {
 
         String username = credentials.getUsername();
@@ -46,6 +57,7 @@ public class AuthService {
                 .age(0)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .sensors(new ArrayList<>())
                 .role(Role.USER)
                 .build();
 

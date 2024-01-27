@@ -1,6 +1,6 @@
 package monitoring.service.dev.controllers.interfaces;
 
-import monitoring.service.dev.dtos.CredentialsDTO;
+import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.Person;
 
 public interface IAuthController {

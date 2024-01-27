@@ -1,6 +1,6 @@
 package monitoring.service.dev.utils.validations;
 
-import monitoring.service.dev.dtos.CredentialsDTO;
+import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.validations.common.IValidator;
 
