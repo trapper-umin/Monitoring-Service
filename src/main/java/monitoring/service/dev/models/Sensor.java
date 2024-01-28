@@ -15,8 +15,7 @@ public class Sensor {
 
     private SensorType type;
 
-    private List<MeterReading> readings = new ArrayList<>();;
-
+    private List<MeterReading> readings = new ArrayList<>();
 
     public void addReadings(List<MeterReading> newReadings) {
         List<MeterReading> modifiableList = new ArrayList<>(newReadings);

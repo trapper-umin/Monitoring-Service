@@ -115,10 +115,11 @@ public class OutputManager {
                         +----------------------------------------------------------+
                         |'/submit -s scanner -i indication -m month -y year'       |
                         |                     - Submit meter reading               |
-                        | /get                - Get current readings               |
-                        | /getMonthly         - Get readings for a specific month  |
-                        | /history            - View submission history            |
-                        | /logout             - Log out                            |
+                        |'/get'               - Get current readings               |
+                        |'/getMonthly -m month -y year'                            |
+                        |                     - Get readings for a specific month  |
+                        |'/history'           - View submission history            |
+                        |'/logout'            - Log out                            |
                         +----------------------------------------------------------+"""
         );
     }
@@ -131,12 +132,14 @@ public class OutputManager {
                         +----------------------------------------------------------+
                         |'/submit -s scanner -i indication -m month -y year'       |
                         |                     - Submit meter reading               |
-                        | /get                - Get current readings               |
-                        | /getMonthly         - Get readings for a specific month  |
-                        | /history            - View submission history            |
-                        | /rights             - Control user rights                |
-                        | /audit              - Audit user action                  |
-                        | /logout             - Log out                            |
+                        |'/get'               - Get current readings               |
+                        |'/getMonthly -m month -y year'                            |
+                        |                     - Get readings for a specific month  |
+                        |'/history'           - View submission history            |
+                        |'/rights -u username -a action                            |
+                        |                     - Control user rights                |
+                        |'/audit'             - Audit user action                  |
+                        |'/logout'            - Log out                            |
                         +----------------------------------------------------------+"""
         );
     }
