@@ -21,36 +21,13 @@ public class PeopleRepository implements IPeopleRepository{
 
     private PeopleRepository() {
 
-        MeterReading meterReading = MeterReading.builder()
-                .indication(100)
-                .date(LocalDateTime.now())
-                .build();
-
-        MeterReading meterReading2 = MeterReading.builder()
-                .indication(200)
-                .date(LocalDateTime.now())
-                .build();
-
-        Sensor sensor = Sensor.builder()
-                .type(SensorType.COLD_WATER_METERS)
-                .readings(List.of(meterReading))
-                .build();
-
-        Sensor sensor2 = Sensor.builder()
-                .type(SensorType.HOT_WATER_METERS)
-                .readings(List.of(meterReading2))
-                .build();
-
         Person person = Person.builder()
                 .username("root")
                 .password("root")
-                .firstName("root")
-                .lastName("root")
-                .age(20)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .role(Role.ADMIN)
-                .sensors(List.of(sensor,sensor2))
+                .sensors(new ArrayList<>())
                 .build();
 
         db.add(person);
@@ -180,7 +157,7 @@ public class PeopleRepository implements IPeopleRepository{
                     }
                 }
                 // Если показаний за этот месяц нет, добавляем новые показания к существующему сенсору
-                existingSensor.getReadings().addAll(newSensor.getReadings());
+                existingSensor.addReadings(new ArrayList<>(newSensor.getReadings()));
             }
         }
     }

@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class History {
 
-    CredentialsDTO credentials;
+    private CredentialsDTO credentials;
 
-    String action;
+    private String action;
 
-    LocalDateTime time;
+    private LocalDateTime time;
 }
