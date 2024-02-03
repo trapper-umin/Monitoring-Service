@@ -10,7 +10,6 @@ import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.validations.PersonPasswordValidation;
 import monitoring.service.dev.utils.validations.PersonUsernameValidation;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class AuthService {

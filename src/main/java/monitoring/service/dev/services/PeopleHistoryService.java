@@ -2,7 +2,7 @@ package monitoring.service.dev.services;
 
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.History;
-import monitoring.service.dev.repositories.HistoryRepository;
+import monitoring.service.dev.repositories.localstorage.HistoryRepository;
 
 import java.util.List;
 

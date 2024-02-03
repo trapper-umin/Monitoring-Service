@@ -1,9 +1,8 @@
 package monitoring.service.dev.services;
 
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
-import monitoring.service.dev.models.Audit;
 import monitoring.service.dev.models.Person;
-import monitoring.service.dev.repositories.PeopleRepository;
+import monitoring.service.dev.repositories.localstorage.PeopleRepository;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.mappers.PersonMapper;
 import org.mapstruct.factory.Mappers;

@@ -4,6 +4,7 @@ import monitoring.service.dev.common.SensorType;
 import monitoring.service.dev.models.Reading;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Sensor;
+import monitoring.service.dev.repositories.localstorage.PeopleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

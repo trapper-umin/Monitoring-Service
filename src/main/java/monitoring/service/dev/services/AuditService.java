@@ -1,7 +1,7 @@
 package monitoring.service.dev.services;
 
 import monitoring.service.dev.models.Audit;
-import monitoring.service.dev.repositories.AuditRepository;
+import monitoring.service.dev.repositories.localstorage.AuditRepository;
 
 import java.util.List;
 

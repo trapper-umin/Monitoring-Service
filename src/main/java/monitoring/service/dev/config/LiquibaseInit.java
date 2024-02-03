@@ -1,24 +1,16 @@
-package monitoring.service.dev.repositories;
+package monitoring.service.dev.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import javax.sql.DataSource;
 import liquibase.Liquibase;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
-import monitoring.service.dev.config.AppConstants;
 
-public class PeopleJDBCRepository {
+public class LiquibaseInit {
 
-    public static void main(String[] args) {
-        test();
-    }
-
-    public static void test() {
+    public void init() {
         try (Connection connection = DriverManager.getConnection(AppConstants.JDBC_URL,
             AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD)) {
 
@@ -27,7 +19,6 @@ public class PeopleJDBCRepository {
                 new ClassLoaderResourceAccessor(), jdbcConnection);
 
             liquibase.update("");
-            System.out.println("Database has been initialized");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } catch (LiquibaseException e) {

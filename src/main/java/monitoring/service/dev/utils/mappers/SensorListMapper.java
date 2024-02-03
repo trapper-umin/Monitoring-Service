@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface SensorListMapper {
 
-    SensorListMapper INSTANCE  = Mappers.getMapper(SensorListMapper.class);
+    SensorListMapper INSTANCE = Mappers.getMapper(SensorListMapper.class);
 
     List<SensorDTO> convertToSensorDTOList(List<Sensor> sensors);
 }

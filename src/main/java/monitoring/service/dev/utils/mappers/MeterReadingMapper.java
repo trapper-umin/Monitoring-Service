@@ -11,5 +11,6 @@ public interface MeterReadingMapper {
     MeterReadingMapper INSTANCE = Mappers.getMapper(MeterReadingMapper.class);
 
     MeterReadingDTO convertToMeterReadingDTO(Reading reading);
+
     Reading convertToMeterReading(MeterReadingDTO meterReadingDTO);
 }

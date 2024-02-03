@@ -1,9 +1,10 @@
-package monitoring.service.dev.repositories;
+package monitoring.service.dev.repositories.localstorage;
 
 import monitoring.service.dev.common.Role;
 import monitoring.service.dev.models.Reading;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Sensor;
+import monitoring.service.dev.repositories.IPeopleRepository;
 import monitoring.service.dev.utils.exceptions.CanNotDoException;
 import monitoring.service.dev.utils.exceptions.MeterReadingExistsException;
 import monitoring.service.dev.utils.exceptions.NotFoundException;

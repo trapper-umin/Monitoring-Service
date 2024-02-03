@@ -24,7 +24,7 @@ public interface SensorAndMeterReadingMapMapper {
         Map<SensorDTO, MeterReadingDTO> dto = new HashMap<>();
         for (Map.Entry<Sensor, Reading> entry : entity.entrySet()) {
             dto.put(sensorMapper.convertToSensorDTO(entry.getKey()),
-                    meterReadingMapper.convertToMeterReadingDTO(entry.getValue()));
+                meterReadingMapper.convertToMeterReadingDTO(entry.getValue()));
         }
 
         return dto;

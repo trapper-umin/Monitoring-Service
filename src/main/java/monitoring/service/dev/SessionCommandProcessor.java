@@ -1,5 +1,15 @@
 package monitoring.service.dev;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import monitoring.service.dev.common.Role;
 import monitoring.service.dev.common.SensorType;
 import monitoring.service.dev.config.AppConstants;
@@ -19,37 +29,28 @@ import monitoring.service.dev.utils.exceptions.MeterReadingExistsException;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.format.TextStyle;
-import java.util.*;
-
 public class SessionCommandProcessor {
-
-    private static SessionCommandProcessor instance;
-
-    private SessionCommandProcessor(){}
-
-    public static SessionCommandProcessor getInstance(){
-        if(instance==null){
-            instance = new SessionCommandProcessor();
-        }
-        return instance;
-    }
 
     private static final OutputManager printer = OutputManager.getInstance();
     private static final DoController doController = DoController.getInstance();
     private static final AdminController adminController = AdminController.getInstance();
     private static final SimpleLogger logger = SimpleLogger.getInstance();
     private static final SimpleHistory history = SimpleHistory.getInstance();
+    private static SessionCommandProcessor instance;
+    private SessionCommandProcessor() {
+    }
 
-    public void submit(CredentialsDTO credentials, String args){
+    public static SessionCommandProcessor getInstance() {
+        if (instance == null) {
+            instance = new SessionCommandProcessor();
+        }
+        return instance;
+    }
+
+    public void submit(CredentialsDTO credentials, String args) {
         Map<String, String> argsMap = ArgsParser.parseArgs(args);
 
-        if(argsMap.size()<4){
+        if (argsMap.size() < 4) {
             printer.showMissingSomeSubmitKey();
             return;
         }
@@ -60,21 +61,17 @@ public class SessionCommandProcessor {
             String month = argsMap.get(AppConstants.ARG_MONTH);
             int year = Integer.parseInt(argsMap.get(AppConstants.ARG_YEAR));
 
-            SensorDTO sensorDTO = SensorDTO.builder()
-                    .type("HOT".equalsIgnoreCase(type) ? SensorType.HOT_WATER_METERS : SensorType.COLD_WATER_METERS)
-                    .readings(new ArrayList<>())
-                    .build();
-
+            SensorDTO sensorDTO = SensorDTO.builder().type(
+                "HOT".equalsIgnoreCase(type) ? SensorType.HOT_WATER_METERS
+                    : SensorType.COLD_WATER_METERS).readings(new ArrayList<>()).build();
 
             String date = month + " " + year;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
             YearMonth yearMonth = YearMonth.parse(date, formatter);
             LocalDateTime time = yearMonth.atDay(1).atStartOfDay();
 
-            MeterReadingDTO meterReadingDTO = MeterReadingDTO.builder()
-                    .indication(indication)
-                    .date(time)
-                    .build();
+            MeterReadingDTO meterReadingDTO = MeterReadingDTO.builder().indication(indication)
+                .date(time).build();
 
             sensorDTO.getReadings().add(meterReadingDTO);
             credentials.getSensors().add(sensorDTO);
@@ -86,33 +83,35 @@ public class SessionCommandProcessor {
 
             printer.showSuccess();
 
-        }catch (NumberFormatException | DateTimeParseException e) {
+        } catch (NumberFormatException | DateTimeParseException e) {
             printer.showCorrectSubmit();
-            logger.logEventUsernameAndError("SUBMIT",credentials,e.getMessage());
-        }catch (NotValidException | MeterReadingExistsException | NotFoundException e) {
+            logger.logEventUsernameAndError("SUBMIT", credentials, e.getMessage());
+        } catch (NotValidException | MeterReadingExistsException | NotFoundException e) {
             printer.show(e);
-            logger.logEventUsernameAndError("SUBMIT",credentials,e.getMessage());
+            logger.logEventUsernameAndError("SUBMIT", credentials, e.getMessage());
         }
     }
 
-    public void get(CredentialsDTO credentials){
+    public void get(CredentialsDTO credentials) {
         List<SensorDTO> sensors = doController.getCurrentReadings(credentials);
         if (sensors.isEmpty()) {
             String message = "There are no current indicators";
             printer.show(message);
-            logger.logEventUsernameAndError("GET",credentials,message);
+            logger.logEventUsernameAndError("GET", credentials, message);
 
         } else {
             printer.showThereAreReadings();
             for (SensorDTO sensor : sensors) {
-                printer.show(" - Sensor: " + sensor.getType() + " - indication - " + sensor.getReadings().get(0).getIndication());
+                printer.show(
+                    " - Sensor: " + sensor.getType() + " - indication - " + sensor.getReadings()
+                        .get(0).getIndication());
             }
 
-            logger.LogEventUsername("GET",credentials);
+            logger.LogEventUsername("GET", credentials);
         }
     }
 
-    public void getMonthly(CredentialsDTO credentials, String args){
+    public void getMonthly(CredentialsDTO credentials, String args) {
         Map<String, String> argsMap = ArgsParser.parseArgs(args);
 
         String parsMonth = argsMap.get(AppConstants.ARG_MONTH);
@@ -124,23 +123,18 @@ public class SessionCommandProcessor {
         }
 
         Month month;
-        try {
-            month = Month.valueOf(parsMonth.toUpperCase(Locale.ENGLISH));
-        } catch (IllegalArgumentException e) {
-            printer.show("Invalid month: " + parsMonth + "\nExpected format: " + getExpectedMonthFormat());
-            return;
-        }
-
-        try {
-            Integer.parseInt(parsYear);
-        } catch (NumberFormatException e) {
-            printer.show("Invalid year: " + parsYear);
-            return;
-        }
-
         List<SensorDTO> monthlyReadings;
         try {
+            month = Month.valueOf(parsMonth.toUpperCase(Locale.ENGLISH));
+            Integer.parseInt(parsYear);
             monthlyReadings = doController.getMonthlyReadings(credentials, parsMonth, parsYear);
+        }catch (NumberFormatException e) {
+            printer.show("Invalid year: " + parsYear);
+            return;
+        }catch (IllegalArgumentException e){
+            printer.show(
+                "Invalid month: " + parsMonth + "\nExpected format: " + getExpectedMonthFormat());
+            return;
         }catch (NotValidException e){
             printer.show(e.getMessage());
             return;
@@ -156,41 +150,46 @@ public class SessionCommandProcessor {
             for (SensorDTO sensor : monthlyReadings) {
                 printer.show("Sensor Type: " + sensor.getType());
                 for (MeterReadingDTO reading : sensor.getReadings()) {
-                    printer.show(" - Indication: " + reading.getIndication() + ", Date: " + reading.getDate().toLocalDate());
+                    printer.show(
+                        " - Indication: " + reading.getIndication() + ", Date: " + reading.getDate()
+                            .toLocalDate());
                 }
             }
 
-            logger.LogEventUsername("GET MONTHLY",credentials);
+            logger.LogEventUsername("GET MONTHLY", credentials);
         }
     }
 
     private String getExpectedMonthFormat() {
         StringBuilder month = new StringBuilder();
         for (Month m : Month.values()) {
-            if (!month.isEmpty()) month.append(", ");
+            if (!month.isEmpty()) {
+                month.append(", ");
+            }
             month.append(m.getDisplayName(TextStyle.FULL, Locale.ENGLISH));
         }
         return month.toString();
     }
 
-    public void history(CredentialsDTO credentials){
+    public void history(CredentialsDTO credentials) {
         List<History> histories = doController.getHistory(credentials);
-        if(histories.isEmpty()){
+        if (histories.isEmpty()) {
             String message = "There are no actions";
             printer.show(message);
-            logger.logEventUsernameAndError("HISTORY",credentials,message);
+            logger.logEventUsernameAndError("HISTORY", credentials, message);
 
-        }else {
-            printer.show("The history of meter readings submitting for "+credentials.getUsername());
-            for(History history : histories){
-                printer.show(" - ACTION: "+history.getAction()+" AT TIME "+history.getTime());
+        } else {
+            printer.show(
+                "The history of meter readings submitting for " + credentials.getUsername());
+            for (History history : histories) {
+                printer.show(" - ACTION: " + history.getAction() + " AT TIME " + history.getTime());
             }
 
-            logger.LogEventUsername("HISTORY",credentials);
+            logger.LogEventUsername("HISTORY", credentials);
         }
     }
 
-    public void rights(Role role, CredentialsDTO credentials, String args){
+    public void rights(Role role, CredentialsDTO credentials, String args) {
         if (role == Role.ADMIN) {
             Map<String, String> argsMap = ArgsParser.parseArgs(args);
 
@@ -203,20 +202,20 @@ public class SessionCommandProcessor {
                 return;
             }
 
-            if(username.equals(credentials.getUsername())){
+            if (username.equals(credentials.getUsername())) {
                 printer.show("You cannot change your rights");
                 return;
             }
 
             try {
-                switch (action){
+                switch (action) {
                     case AppConstants.UPGRADE -> {
                         adminController.setAuthorities(username);
-                        logger.logEventRightsToAdminSuccess(credentials,username);
+                        logger.logEventRightsToAdminSuccess(credentials, username);
                     }
                     case AppConstants.DOWNGRADE -> {
                         adminController.deleteAuthorities(username);
-                        logger.logEventRightsToUserSuccess(credentials,username);
+                        logger.logEventRightsToUserSuccess(credentials, username);
                     }
                     default -> {
                         printer.show("incorrect action");
@@ -224,37 +223,38 @@ public class SessionCommandProcessor {
                     }
                 }
 
-            }catch (NotFoundException | CanNotDoException e){
+            } catch (NotFoundException | CanNotDoException e) {
                 printer.show(e.getMessage());
-                logger.logEventUsernameRoleAndError("RIGHTS",credentials,e.getMessage(),role);
+                logger.logEventUsernameRoleAndError("RIGHTS", credentials, e.getMessage(), role);
             }
 
             printer.show("Users and their rights after changes: ");
             List<CredentialsDTO> credentialsDTOS = adminController.getAllUsers();
-            for(CredentialsDTO user : credentialsDTOS){
-                printer.show(" - USERNAME: "+ (user.getUsername().equals(credentials.getUsername()) ?
-                        user.getUsername() + " RIGHTS: "+user.getRole() +" - ITS YOU" :
-                        user.getUsername() + " RIGHTS: "+user.getRole()));
+            for (CredentialsDTO user : credentialsDTOS) {
+                printer.show(
+                    " - USERNAME: " + (user.getUsername().equals(credentials.getUsername()) ?
+                        user.getUsername() + " RIGHTS: " + user.getRole() + " - ITS YOU"
+                        : user.getUsername() + " RIGHTS: " + user.getRole()));
             }
 
         } else {
             String message = "403 FORBIDDEN (Unauthorized action)";
             printer.show(message);
-            logger.logEventUsernameRoleAndError("RIGHTS",credentials,message,role);
+            logger.logEventUsernameRoleAndError("RIGHTS", credentials, message, role);
         }
     }
 
-    public void audit(Role role, CredentialsDTO credentials){
+    public void audit(Role role, CredentialsDTO credentials) {
         if (role == Role.ADMIN) {
 
             List<Audit> audits = adminController.getAudit();
 
-            if(audits.isEmpty()){
+            if (audits.isEmpty()) {
                 String message = "There are no audits";
                 printer.show(message);
-                logger.logEventUsernameRoleAndError("AUDIT",credentials,message,role);
-            }else{
-                for(Audit audit :audits){
+                logger.logEventUsernameRoleAndError("AUDIT", credentials, message, role);
+            } else {
+                for (Audit audit : audits) {
                     printer.show(audit.getLog());
                 }
 
@@ -264,15 +264,15 @@ public class SessionCommandProcessor {
         } else {
             String message = "403 FORBIDDEN (Unauthorized action)";
             printer.show(message);
-            logger.logEventUsernameRoleAndError("AUDIT",credentials,message,role);
+            logger.logEventUsernameRoleAndError("AUDIT", credentials, message, role);
         }
     }
 
-    public boolean logout(CredentialsDTO credentials){
+    public boolean logout(CredentialsDTO credentials) {
         boolean isSessionActive = false;
 
         printer.showLogout();
-        logger.LogEventUsername("LOGOUT",credentials);
+        logger.LogEventUsername("LOGOUT", credentials);
 
         return isSessionActive;
     }

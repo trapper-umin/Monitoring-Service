@@ -13,6 +13,8 @@ public interface PersonMapper {
     PersonMapper INSTANCE = Mappers.getMapper(PersonMapper.class);
 
     Person convertToPerson(CredentialsDTO credentials);
+
     CredentialsDTO convertToCredentialsDTO(Person person);
+
     List<CredentialsDTO> convertToCredentialsDTOList(List<Person> people);
 }

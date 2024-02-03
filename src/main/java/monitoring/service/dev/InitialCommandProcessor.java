@@ -1,5 +1,8 @@
 package monitoring.service.dev;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Scanner;
 import monitoring.service.dev.common.Role;
 import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.controllers.AuthController;
@@ -9,38 +12,32 @@ import monitoring.service.dev.out.OutputManager;
 import monitoring.service.dev.utils.ArgsParser;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
+import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 import monitoring.service.dev.utils.mappers.PersonMapper;
 import org.mapstruct.factory.Mappers;
 
-
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
-
 public class InitialCommandProcessor {
-
-    private static InitialCommandProcessor instance;
-
-    private InitialCommandProcessor(){}
-
-    public static InitialCommandProcessor getInstance(){
-        if(instance==null){
-            instance = new InitialCommandProcessor();
-        }
-        return instance;
-    }
 
     private static final Scanner keyboard = new Scanner(System.in);
     private static final PersonMapper pMapper = Mappers.getMapper(PersonMapper.class);
     private static final OutputManager printer = OutputManager.getInstance();
     private static final SessionCommandProcessor handler = SessionCommandProcessor.getInstance();
     private static final AuthController auth = AuthController.getInstance();
+    private static InitialCommandProcessor instance;
+    private InitialCommandProcessor() {
+    }
 
+    public static InitialCommandProcessor getInstance() {
+        if (instance == null) {
+            instance = new InitialCommandProcessor();
+        }
+        return instance;
+    }
 
     public Person handleRegistration(String args) {
         Map<String, String> argsMap = ArgsParser.parseArgs(args);
-        String username = argsMap.get("-u");
-        String password = argsMap.get("-p");
+        String username = argsMap.get(AppConstants.ARG_USERNAME);
+        String password = argsMap.get(AppConstants.ARG_PASSWORD);
 
         if (username == null || password == null) {
             printer.showMissingUsernameOrPassword();
@@ -48,17 +45,14 @@ public class InitialCommandProcessor {
         }
 
         try {
-            CredentialsDTO dto = CredentialsDTO.builder()
-                    .username(username)
-                    .password(password)
-                    .build();
+            CredentialsDTO dto = CredentialsDTO.builder().username(username).password(password)
+                .build();
 
             Person person = auth.registration(dto);
-
             printer.showSuccessfulRegistration(person);
 
             return person;
-        } catch (NotValidException e) {
+        } catch (NotValidException | ProblemWithSQLException e) {
             printer.show(e);
             return null;
         }
@@ -66,8 +60,8 @@ public class InitialCommandProcessor {
 
     public Person handleLogin(String args) {
         Map<String, String> argsMap = ArgsParser.parseArgs(args);
-        String username = argsMap.get("-u");
-        String password = argsMap.get("-p");
+        String username = argsMap.get(AppConstants.ARG_USERNAME);
+        String password = argsMap.get(AppConstants.ARG_PASSWORD);
 
         if (username == null || password == null) {
             printer.showMissingUsernameOrPassword();
@@ -75,24 +69,23 @@ public class InitialCommandProcessor {
         }
 
         try {
-            CredentialsDTO dto = CredentialsDTO.builder()
-                    .username(username)
-                    .password(password)
-                    .build();
+            CredentialsDTO dto = CredentialsDTO.builder().username(username).password(password)
+                .build();
 
             Person person = auth.authentication(dto);
-
             printer.showSuccessfulAuthentication(person);
 
             return person;
-        } catch (NotFoundException | NotValidException e) {
+        } catch (NotFoundException | NotValidException | ProblemWithSQLException e) {
             printer.show(e);
             return null;
         }
     }
 
-    public void handleSession(Person person){
-        if(person==null) return;
+    public void handleSession(Person person) {
+        if (person == null) {
+            return;
+        }
 
         Role role = person.getRole();
 

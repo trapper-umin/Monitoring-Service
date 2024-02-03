@@ -6,10 +6,11 @@ public class DoController extends ImplDoController {
 
     private static DoController instance;
 
-    private DoController(){}
+    private DoController() {
+    }
 
-    public static DoController getInstance(){
-        if(instance==null){
+    public static DoController getInstance() {
+        if (instance == null) {
             instance = new DoController();
         }
         return instance;

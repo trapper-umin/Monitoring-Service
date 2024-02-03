@@ -1,4 +1,4 @@
-package monitoring.service.dev.repositories;
+package monitoring.service.dev.repositories.localstorage;
 
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.History;
