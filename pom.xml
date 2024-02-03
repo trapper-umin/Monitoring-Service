@@ -16,6 +16,8 @@
 
 		<lombok.version>1.18.28</lombok.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+		<postgresql.driver.version>42.7.1</postgresql.driver.version>
+		<liquibase.version>4.23.0</liquibase.version>
 		<junit.version>5.10.0</junit.version>
 	</properties>
 
@@ -34,11 +36,24 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.driver.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>

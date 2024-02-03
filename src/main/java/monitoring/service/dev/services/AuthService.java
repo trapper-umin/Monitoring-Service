@@ -52,11 +52,6 @@ public class AuthService {
         Person person = Person.builder()
                 .username(username)
                 .password(password)
-                .firstName(null)
-                .lastName(null)
-                .age(0)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .sensors(new ArrayList<>())
                 .role(Role.USER)
                 .build();

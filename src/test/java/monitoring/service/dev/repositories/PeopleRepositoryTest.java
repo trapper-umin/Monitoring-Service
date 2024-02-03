@@ -1,7 +1,7 @@
 package monitoring.service.dev.repositories;
 
 import monitoring.service.dev.common.SensorType;
-import monitoring.service.dev.models.MeterReading;
+import monitoring.service.dev.models.Reading;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Sensor;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,8 +22,8 @@ public class PeopleRepositoryTest {
         repository = PeopleRepository.getInstance();
         PeopleRepository.clearDb();
 
-        Sensor sensor1 = new Sensor(SensorType.HOT_WATER_METERS, List.of(new MeterReading(25.0, LocalDateTime.now())));
-        Sensor sensor2 = new Sensor(SensorType.COLD_WATER_METERS, List.of(new MeterReading(60.0, LocalDateTime.now().minusMonths(1))));
+        Sensor sensor1 = new Sensor(1,SensorType.HOT_WATER_METERS, List.of(new Reading(25.0, LocalDateTime.now())));
+        Sensor sensor2 = new Sensor(2,SensorType.COLD_WATER_METERS, List.of(new Reading(60.0, LocalDateTime.now().minusMonths(1))));
 
         testPerson = Person.builder()
                 .username("root")

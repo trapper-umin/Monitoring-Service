@@ -10,10 +10,11 @@ public class SimpleHistory {
 
     private static SimpleHistory instance;
 
-    private SimpleHistory(){}
+    private SimpleHistory() {
+    }
 
-    public static SimpleHistory getInstance(){
-        if(instance==null){
+    public static SimpleHistory getInstance() {
+        if (instance == null) {
             instance = new SimpleHistory();
         }
         return instance;
@@ -21,14 +22,12 @@ public class SimpleHistory {
 
     private static final DoController doController = DoController.getInstance();
 
-    public void push(CredentialsDTO credentials){
-        doController.pushHistory(
-                History.builder()
-                        .credentials(credentials)
-                        .action("SUBMIT ("+credentials.getSensors().get(0).getType()+") WITH READINGS: "
-                                +credentials.getSensors().get(0).getReadings().get(0).getIndication()
-                                +" BY "+credentials.getSensors().get(0).getReadings().get(0).getDate())
-                        .time(LocalDateTime.now())
-                        .build());
+    public void push(CredentialsDTO credentials) {
+        String username = credentials.getUsername();
+        doController.pushHistory(History.builder().username(username).action(
+                "SUBMIT (" + credentials.getSensors().get(0).getType() + ") WITH READINGS: "
+                    + credentials.getSensors().get(0).getReadings().get(0).getIndication() + " BY "
+                    + credentials.getSensors().get(0).getReadings().get(0).getDate())
+            .time(LocalDateTime.now()).build());
     }
 }

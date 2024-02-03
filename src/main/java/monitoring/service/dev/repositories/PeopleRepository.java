@@ -1,7 +1,7 @@
 package monitoring.service.dev.repositories;
 
 import monitoring.service.dev.common.Role;
-import monitoring.service.dev.models.MeterReading;
+import monitoring.service.dev.models.Reading;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Sensor;
 import monitoring.service.dev.utils.exceptions.CanNotDoException;
@@ -9,12 +9,11 @@ import monitoring.service.dev.utils.exceptions.MeterReadingExistsException;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.*;
 
-public class PeopleRepository implements IPeopleRepository{
+public class PeopleRepository implements IPeopleRepository {
     private static PeopleRepository instance;
     private static final List<Person> db = new ArrayList<>();
 
@@ -23,8 +22,6 @@ public class PeopleRepository implements IPeopleRepository{
         Person person = Person.builder()
                 .username("root")
                 .password("root")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .role(Role.ADMIN)
                 .sensors(new ArrayList<>())
                 .build();
@@ -47,6 +44,7 @@ public class PeopleRepository implements IPeopleRepository{
     public static void clearDb() {
         db.clear();
     }
+
     /**
      * Возвращает список всех пользователей в базе данных.
      * Этот метод предоставляет доступ к внутреннему списку {@code db}, содержащему всех зарегистрированных пользователей.
@@ -64,7 +62,7 @@ public class PeopleRepository implements IPeopleRepository{
      * @param person Объект {@link Person}, представляющий регистрируемого пользователя.
      */
     @Override
-    public void registration(Person person){
+    public void registration(Person person) {
         db.add(person);
     }
 
@@ -76,10 +74,10 @@ public class PeopleRepository implements IPeopleRepository{
      *
      * @param username Имя пользователя, по которому осуществляется поиск.
      * @return {@link Optional} объект {@link Person}, если пользователь с таким именем найден,
-     *         или пустой {@link Optional}, если пользователь не найден.
+     * или пустой {@link Optional}, если пользователь не найден.
      */
     @Override
-    public Optional<Person> findByUsername(String username){
+    public Optional<Person> findByUsername(String username) {
         return db.stream()
                 .filter(person -> person.getUsername().equals(username))
                 .findFirst();
@@ -92,8 +90,8 @@ public class PeopleRepository implements IPeopleRepository{
      *
      * @param credentials Объект {@link Person}, содержащий учетные данные пользователя.
      * @return Список {@link Sensor}, каждый из которых имеет одно показание за текущий месяц.
-     *         Если пользователь не найден или у пользователя нет сенсоров с показаниями за текущий месяц,
-     *         возвращается пустой список.
+     * Если пользователь не найден или у пользователя нет сенсоров с показаниями за текущий месяц,
+     * возвращается пустой список.
      */
     @Override
     public List<Sensor> getCurrentReadings(Person credentials) {
@@ -125,11 +123,11 @@ public class PeopleRepository implements IPeopleRepository{
      * и фильтрует показания этих сенсоров, оставляя только те, что соответствуют указанному месяцу и году.
      *
      * @param credentials Учетные данные пользователя, для которого производится поиск сенсоров.
-     * @param month Месяц (в формате полного названия на английском, например, "January"), за который требуется получить показания.
-     * @param year Год, за который требуется получить показания.
+     * @param month       Месяц (в формате полного названия на английском, например, "January"), за который требуется получить показания.
+     * @param year        Год, за который требуется получить показания.
      * @return Список {@link Sensor}, содержащий сенсоры и их показания, соответствующие указанному периоду.
-     *         Если пользователь не найден или у пользователя нет сенсоров с показаниями за указанный период,
-     *         возвращается пустой список.
+     * Если пользователь не найден или у пользователя нет сенсоров с показаниями за указанный период,
+     * возвращается пустой список.
      */
     @Override
     public List<Sensor> getMonthlyReadings(Person credentials, String month, String year) {
@@ -146,9 +144,9 @@ public class PeopleRepository implements IPeopleRepository{
         for (Sensor sensor : foundPerson.get().getSensors()) {
             Sensor tempSensor = new Sensor();
             tempSensor.setType(sensor.getType());
-            List<MeterReading> tempReadings = new ArrayList<>();
+            List<Reading> tempReadings = new ArrayList<>();
 
-            for (MeterReading reading : sensor.getReadings()) {
+            for (Reading reading : sensor.getReadings()) {
                 LocalDate readingDate = reading.getDate().toLocalDate();
                 YearMonth readingYearMonth = YearMonth.from(readingDate);
 
@@ -175,7 +173,7 @@ public class PeopleRepository implements IPeopleRepository{
      *
      * @param person Объект {@link Person}, содержащий учетные данные пользователя и список сенсоров с показаниями.
      * @throws MeterReadingExistsException если показания за данный месяц уже зарегистрированы для сенсора.
-     * @throws NotFoundException если пользователь не найден в базе данных.
+     * @throws NotFoundException           если пользователь не найден в базе данных.
      */
     @Override
     public void submitReading(Person person) throws MeterReadingExistsException, NotFoundException {
@@ -203,7 +201,7 @@ public class PeopleRepository implements IPeopleRepository{
             if (existingSensor == null) {
                 foundPerson.getSensors().add(newSensor);
             } else {
-                for (MeterReading newReading : newSensor.getReadings()) {
+                for (Reading newReading : newSensor.getReadings()) {
                     YearMonth newReadingMonth = YearMonth.from(newReading.getDate());
                     boolean hasSameMonthReading = existingSensor.getReadings().stream()
                             .anyMatch(existingReading -> YearMonth.from(existingReading.getDate()).equals(newReadingMonth));
@@ -223,7 +221,7 @@ public class PeopleRepository implements IPeopleRepository{
      * позволяя получить обзор или произвести операции над всеми учетными записями.
      *
      * @return Список {@link Person}, представляющий всех пользователей в базе данных.
-     *         Если в базе данных нет пользователей, возвращается пустой список.
+     * Если в базе данных нет пользователей, возвращается пустой список.
      */
     @Override
     public List<Person> getAllUsers() {
@@ -243,7 +241,7 @@ public class PeopleRepository implements IPeopleRepository{
 
     @Override
     public void setAuthorities(Person person) {
-        if(person.getRole().equals(Role.ADMIN)){
+        if (person.getRole().equals(Role.ADMIN)) {
             throw new CanNotDoException("so " + person.getUsername() + " has a role " + person.getRole());
         }
 
@@ -262,7 +260,7 @@ public class PeopleRepository implements IPeopleRepository{
      */
     @Override
     public void deleteAuthorities(Person person) {
-        if(person.getRole().equals(Role.USER)){
+        if (person.getRole().equals(Role.USER)) {
             throw new CanNotDoException("so " + person.getUsername() + " has a role " + person.getRole());
         }
 

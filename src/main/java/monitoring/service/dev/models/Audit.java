@@ -1,9 +1,6 @@
 package monitoring.service.dev.models;
 
 import lombok.*;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -11,6 +8,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Audit {
+
+    private int id;
 
     private String log;
 }

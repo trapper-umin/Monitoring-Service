@@ -1,8 +1,6 @@
 package monitoring.service.dev.models;
 
 import lombok.*;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,7 +10,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class History {
 
-    private CredentialsDTO credentials;
+    private int id;
+
+    private String username;
 
     private String action;
 

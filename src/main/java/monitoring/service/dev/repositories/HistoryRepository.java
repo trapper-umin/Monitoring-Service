@@ -13,23 +13,24 @@ public class HistoryRepository {
 
     private static final List<History> historyDB = new ArrayList<>();
 
-    private HistoryRepository(){}
+    private HistoryRepository() {
+    }
 
-    public static HistoryRepository getInstance(){
-        if(instance==null){
+    public static HistoryRepository getInstance() {
+        if (instance == null) {
             instance = new HistoryRepository();
         }
         return instance;
     }
 
-    public void push(History history){
+    public void push(History history) {
         historyDB.add(history);
     }
 
-    public List<History> get(CredentialsDTO credentials){
-        return historyDB.stream()
-                .filter(h -> h.getCredentials().getUsername().equals(credentials.getUsername()) &&
-                        h.getCredentials().getPassword().equals(credentials.getPassword()))
-                .collect(Collectors.toList());
+    public List<History> get(CredentialsDTO credentials) {
+        String username = credentials.getUsername();
+        return historyDB.stream().filter(
+                h -> h.getUsername().equals(username))
+            .collect(Collectors.toList());
     }
 }

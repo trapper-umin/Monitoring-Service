@@ -1,6 +1,9 @@
 package monitoring.service.dev.config;
 
 public class AppConstants {
+    public static final String JDBC_URL = "jdbc:postgresql://localhost:5433/postgres";
+    public static final String JDBC_USERNAME = "postgres";
+    public static final String JDBC_PASSWORD = "postgres";
     public static final String COMMAND_REGISTER = "/register";
     public static final String COMMAND_LOGIN = "/login";
     public static final String COMMAND_EXIT = "/exit";
