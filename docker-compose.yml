@@ -11,6 +11,7 @@ services:
 #      JDBC_PASSWORD: 9qwe1ox
 
   db:
+    container_name: postgres-db
     image: postgres:latest
     environment:
       POSTGRES_DB: monitoring-service-db

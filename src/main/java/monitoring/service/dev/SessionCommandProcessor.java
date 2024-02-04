@@ -52,7 +52,7 @@ public class SessionCommandProcessor {
     public void submit(CredentialsDTO credentials, String args) {
         Map<String, String> argsMap = ArgsParser.parseArgs(args);
 
-        if (argsMap.size() < 4) {
+        if (argsMap.size() < AppConstants.AMOUNT_OF_PARAMS_IN_SUBMIT) {
             printer.showMissingSomeSubmitKey();
             return;
         }

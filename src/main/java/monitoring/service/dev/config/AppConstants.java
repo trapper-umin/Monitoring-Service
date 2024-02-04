@@ -30,4 +30,5 @@ public class AppConstants {
     public static final String DOWNGRADE = "downgrade";
     public static final int MIN_YEAR_BORDER = 1900;
     public static final int MAX_YEAR_BORDER = 2500;
+    public static final int AMOUNT_OF_PARAMS_IN_SUBMIT = 4;
 }
