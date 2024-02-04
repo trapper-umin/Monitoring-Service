@@ -5,7 +5,6 @@ import monitoring.service.dev.common.Role;
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IPeopleRepository;
-import monitoring.service.dev.repositories.RepositoryFactory;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.validations.PersonPasswordValidation;
@@ -17,7 +16,7 @@ public class AuthService {
     private static final PersonPasswordValidation passwordValidation = PersonPasswordValidation.getInstance();
     private final IPeopleRepository repository;
 
-    public AuthService(IPeopleRepository repository){
+    public AuthService(IPeopleRepository repository) {
         this.repository = repository;
     }
 

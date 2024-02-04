@@ -1,17 +1,16 @@
 package monitoring.service.dev.repositories.localstorage;
 
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
-import monitoring.service.dev.models.History;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.models.History;
 
+@Deprecated
 public class HistoryRepository {
 
-    private static HistoryRepository instance;
-
     private static final List<History> historyDB = new ArrayList<>();
+    private static HistoryRepository instance;
 
     private HistoryRepository() {
     }
@@ -29,8 +28,7 @@ public class HistoryRepository {
 
     public List<History> get(CredentialsDTO credentials) {
         String username = credentials.getUsername();
-        return historyDB.stream().filter(
-                h -> h.getUsername().equals(username))
+        return historyDB.stream().filter(h -> h.getUsername().equals(username))
             .collect(Collectors.toList());
     }
 }

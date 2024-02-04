@@ -38,6 +38,7 @@ public class SessionCommandProcessor {
     private static final SimpleLogger logger = SimpleLogger.getInstance();
     private static final SimpleHistory history = SimpleHistory.getInstance();
     private static SessionCommandProcessor instance;
+
     private SessionCommandProcessor() {
     }
 
@@ -96,7 +97,7 @@ public class SessionCommandProcessor {
         List<SensorDTO> sensors = new ArrayList<>();
         try {
             sensors = doController.getCurrentReadings(credentials);
-        }catch (ProblemWithSQLException e){
+        } catch (ProblemWithSQLException e) {
             printer.show(e.getMessage());
         }
         if (sensors.isEmpty()) {
@@ -133,14 +134,14 @@ public class SessionCommandProcessor {
             month = Month.valueOf(parsMonth.toUpperCase(Locale.ENGLISH));
             Integer.parseInt(parsYear);
             monthlyReadings = doController.getMonthlyReadings(credentials, parsMonth, parsYear);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             printer.show("Invalid year: " + parsYear);
             return;
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             printer.show(
                 "Invalid month: " + parsMonth + "\nExpected format: " + getExpectedMonthFormat());
             return;
-        }catch (NotValidException | ProblemWithSQLException e){
+        } catch (NotValidException | ProblemWithSQLException e) {
             printer.show(e.getMessage());
             return;
         }

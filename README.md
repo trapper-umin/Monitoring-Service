@@ -1,6 +1,7 @@
 ## Getting Started (RU)
+- Выполните `docker-compose build` и `docker-compose up` для развертывания бд
 - Сначала выполните команду `mvn clean install` для компиляции кода в jar файл
-- Далее выполните команду `java -jar .\target\Monitoring-Service-0.0.1-SNAPSHOT.jar` для запуска jar файла
+- Далее выполните команду `java -jar .\target\Monitoring-Service-2.1.0.jar` для запуска jar файла
   
 ### Stack
 - Java 17
@@ -20,4 +21,3 @@
 | `/rights`     | `-u` username `-a` action (upgrade or downgrade)               | ***ADMIN***           | /rights -u trapper -a upgrade              | Контроль прав                         |
 | `/audit`      | нет                                                            | ***ADMIN***           | /audit                                           | Аудит                                 |
 | `/logout`     | нет                                                            | ***USER***            | /logout                                           | Выход из аккаунта                     |
-

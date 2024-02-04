@@ -1,9 +1,12 @@
 package monitoring.service.dev.config;
 
 public class AppConstants {
-    public static final String JDBC_URL = "jdbc:postgresql://localhost:5433/postgres"; //TODO port 5433
-    public static final String JDBC_USERNAME = "postgres";
-    public static final String JDBC_PASSWORD = "postgres";
+    public static final String JDBC_URL = "jdbc:postgresql://localhost:5433/monitoring-service-db";
+    public static final String JDBC_USERNAME = "trapper";
+    public static final String JDBC_PASSWORD = "9qwe1ox";
+//    public static final String JDBC_URL = System.getenv("JDBC_URL");
+//    public static final String JDBC_USERNAME = System.getenv("JDBC_USERNAME");
+//    public static final String JDBC_PASSWORD = System.getenv("JDBC_PASSWORD");
     public static final String COMMAND_REGISTER = "/register";
     public static final String COMMAND_LOGIN = "/login";
     public static final String COMMAND_EXIT = "/exit";

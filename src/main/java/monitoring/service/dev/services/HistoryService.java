@@ -1,31 +1,28 @@
 package monitoring.service.dev.services;
 
+import java.util.List;
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.History;
 import monitoring.service.dev.repositories.IHistoryRepository;
-
-import java.util.List;
-import monitoring.service.dev.repositories.jdbc.HistoryRepository;
+import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 
 public class HistoryService {
 
-    private static HistoryService instance;
-    private static final IHistoryRepository repository = new HistoryRepository();
+    private final IHistoryRepository repository;
 
-    private HistoryService(){}
+    public HistoryService(IHistoryRepository repository) {
+        this.repository = repository;
+    }
 
-    public static HistoryService getInstance(){
-        if(instance==null){
-            instance = new HistoryService();
+    public void push(History history) {
+        try {
+            repository.push(history);
+        } catch (ProblemWithSQLException e) {
+            System.out.println(e.getMessage());
         }
-        return instance;
     }
 
-    public void push(History history){
-        repository.push(history);
-    }
-
-    public List<History> get(CredentialsDTO credentials){
+    public List<History> get(CredentialsDTO credentials) {
         return repository.get(credentials);
     }
 }

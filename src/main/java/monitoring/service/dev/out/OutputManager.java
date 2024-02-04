@@ -90,7 +90,7 @@ public class OutputManager {
                  / /  / / /_/ / / / / / /_/ /_/ / /  / / / / / /_/ /   ___/ /  __/ /   | |/ / / /__/  __/
                 /_/  /_/\\____/_/ /_/_/\\__/\\____/_/  /_/_/ /_/\\__, /   /____/\\___/_/    |___/_/\\___/\\___/\s
                                                             /____/                                      \s
-                     :: Monitoring-Service By trapper for Y_LAB ::                   (v2.0.2)                          
+                     :: Monitoring-Service By trapper for Y_LAB ::                   (v2.0.5)
                 """);
 
         System.out.println(

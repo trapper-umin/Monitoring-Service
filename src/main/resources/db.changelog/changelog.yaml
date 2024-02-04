@@ -1,9 +1,6 @@
 databaseChangeLog:
   - include:
-      file: migrations/001-create-table.yaml
-      relativeToChangelogFile: true
-  - include:
-      file: migrations/002-drop-table.yaml
+      file: migrations/000-create-schema-for-liquibase.yaml
       relativeToChangelogFile: true
   - include:
       file: migrations/003-create-person-table.yaml
@@ -26,3 +23,12 @@ databaseChangeLog:
   - include:
       file: migrations/009-create-function-save-sensor-reading.yaml
       relativeToChangelogFile: true
+#  - include:
+#      file: migrations/011-create-schema-for-entities.yaml
+#      relativeToChangelogFile: true
+#  - include:
+#      file: migrations/012-migrate-entities-to-new-schema.yaml
+#      relativeToChangelogFile: true
+#  - include:
+#      file: migrations/013-set-main-schema.yaml
+#      relativeToChangelogFile: true

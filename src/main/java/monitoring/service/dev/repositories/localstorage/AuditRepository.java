@@ -1,20 +1,20 @@
 package monitoring.service.dev.repositories.localstorage;
 
-import monitoring.service.dev.models.Audit;
-
 import java.util.ArrayList;
 import java.util.List;
+import monitoring.service.dev.models.Audit;
 
+@Deprecated
 public class AuditRepository {
 
+    private static final List<Audit> auditDB = new ArrayList<>();
     private static AuditRepository instance;
 
-    private static final List<Audit> auditDB = new ArrayList<>();
+    private AuditRepository() {
+    }
 
-    private AuditRepository(){}
-
-    public static AuditRepository getInstance(){
-        if(instance==null){
+    public static AuditRepository getInstance() {
+        if (instance == null) {
             instance = new AuditRepository();
         }
         return instance;

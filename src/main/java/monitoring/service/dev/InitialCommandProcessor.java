@@ -24,6 +24,7 @@ public class InitialCommandProcessor {
     private static final SessionCommandProcessor handler = SessionCommandProcessor.getInstance();
     private static final AuthController auth = AuthController.getInstance();
     private static InitialCommandProcessor instance;
+
     private InitialCommandProcessor() {
     }
 

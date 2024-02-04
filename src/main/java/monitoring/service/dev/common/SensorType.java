@@ -2,8 +2,7 @@ package monitoring.service.dev.common;
 
 public enum SensorType {
 
-    COLD_WATER_METERS("COLD"),
-    HOT_WATER_METERS("HOT");
+    COLD_WATER_METERS("COLD"), HOT_WATER_METERS("HOT");
 
     private final String name;
 

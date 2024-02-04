@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-migrate-entities-to-new-schema
+      author: trapper
+      changes:
+        - sql: ALTER TABLE public.person SET SCHEMA entities;
+        - sql: ALTER TABLE public.sensor SET SCHEMA entities;
+        - sql: ALTER TABLE public.reading SET SCHEMA entities;
+        - sql: ALTER TABLE public.history SET SCHEMA entities;
+        - sql: ALTER TABLE public.audit SET SCHEMA entities;
