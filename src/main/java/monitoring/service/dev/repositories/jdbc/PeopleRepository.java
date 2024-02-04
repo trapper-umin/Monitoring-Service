@@ -1,4 +1,4 @@
-package monitoring.service.dev.repositories.db;
+package monitoring.service.dev.repositories.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,7 +22,8 @@ public class PeopleRepository implements IPeopleRepository {
     public Person registration(Person person) {
         try (Connection connection = DriverManager.getConnection(AppConstants.JDBC_URL,
             AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD);
-            PreparedStatement statementForReg = connection.prepareStatement(REGISTRATION_QUERY)) {
+            PreparedStatement statementForReg = connection.prepareStatement(
+            REGISTRATION_QUERY)) {
 
             connection.setAutoCommit(false);
 
@@ -34,7 +35,8 @@ public class PeopleRepository implements IPeopleRepository {
             connection.commit();
             return person;
         } catch (SQLException e) {
-            throw new ProblemWithSQLException("Problem with registration. Please try again later.\n"+e.getMessage());
+            throw new ProblemWithSQLException(
+                "Problem with registration. Please try again later.\n" + e.getMessage());
         }
     }
 
@@ -43,7 +45,8 @@ public class PeopleRepository implements IPeopleRepository {
         Person person = null;
         try (Connection connection = DriverManager.getConnection(AppConstants.JDBC_URL,
             AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USERNAME_QUERY)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+            FIND_BY_USERNAME_QUERY)) {
 
             preparedStatement.setString(1, username);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -62,21 +65,22 @@ public class PeopleRepository implements IPeopleRepository {
         }
     }
 
-    public int getIdByUsername(String username){
+    public int getIdByUsername(String username) {
         int id = 0;
         try (Connection connection = DriverManager.getConnection(AppConstants.JDBC_URL,
             AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD);
-            PreparedStatement statement = connection.prepareStatement(GET_PERSON_ID_QUERY)) {
+            PreparedStatement statement = connection.prepareStatement(
+            GET_PERSON_ID_QUERY)) {
 
             statement.setString(1, username);
 
-            try (ResultSet resultSet = statement.executeQuery()){
-                while (resultSet.next()){
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
                     id = resultSet.getInt("person_id");
                 }
             }
-        return id;
-        }catch (SQLException e){
+            return id;
+        } catch (SQLException e) {
             throw new ProblemWithSQLException(e.getMessage());
         }
     }

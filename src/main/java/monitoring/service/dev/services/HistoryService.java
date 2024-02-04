@@ -2,14 +2,15 @@ package monitoring.service.dev.services;
 
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.History;
-import monitoring.service.dev.repositories.localstorage.HistoryRepository;
+import monitoring.service.dev.repositories.IHistoryRepository;
 
 import java.util.List;
+import monitoring.service.dev.repositories.jdbc.HistoryRepository;
 
 public class HistoryService {
 
     private static HistoryService instance;
-    private static final HistoryRepository repository = HistoryRepository.getInstance();
+    private static final IHistoryRepository repository = new HistoryRepository();
 
     private HistoryService(){}
 

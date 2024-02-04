@@ -1,14 +1,15 @@
 package monitoring.service.dev.services;
 
 import monitoring.service.dev.models.Audit;
-import monitoring.service.dev.repositories.localstorage.AuditRepository;
+import monitoring.service.dev.repositories.IAuditRepository;
 
 import java.util.List;
+import monitoring.service.dev.repositories.jdbc.AuditRepository;
 
 public class AuditService {
 
     private static AuditService instance;
-    private static final AuditRepository repository = AuditRepository.getInstance();
+    private static final IAuditRepository repository = new AuditRepository();
 
     private AuditService(){}
 

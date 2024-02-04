@@ -4,8 +4,8 @@ import monitoring.service.dev.controllers.interfaces.IDoController;
 import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.History;
-import monitoring.service.dev.repositories.db.PeopleRepository;
-import monitoring.service.dev.repositories.db.ReadingsRepository;
+import monitoring.service.dev.repositories.jdbc.PeopleRepository;
+import monitoring.service.dev.repositories.jdbc.ReadingsRepository;
 import monitoring.service.dev.services.DoService;
 import monitoring.service.dev.services.HistoryService;
 

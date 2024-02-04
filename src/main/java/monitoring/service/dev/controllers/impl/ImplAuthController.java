@@ -4,7 +4,7 @@ import monitoring.service.dev.controllers.interfaces.IAuthController;
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IPeopleRepository;
-import monitoring.service.dev.repositories.db.PeopleRepository;
+import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 import monitoring.service.dev.services.AuthService;
 
 public abstract class ImplAuthController implements IAuthController {

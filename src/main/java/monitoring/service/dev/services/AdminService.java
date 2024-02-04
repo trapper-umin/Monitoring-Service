@@ -5,6 +5,7 @@ import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IAdminRepository;
 import monitoring.service.dev.repositories.IPeopleRepository;
 import monitoring.service.dev.repositories.RepositoryFactory;
+import monitoring.service.dev.repositories.jdbc.AdminRepository;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.mappers.PersonMapper;
 import org.mapstruct.factory.Mappers;
@@ -14,7 +15,7 @@ import java.util.List;
 public class AdminService {
 
     private static AdminService instance;
-    private static final IAdminRepository adminRepository = null; //TODO
+    private static final IAdminRepository adminRepository = new AdminRepository(); //TODO
     private static final IPeopleRepository peopleRepository = RepositoryFactory.getRepository(); //TODO
     private static final PersonMapper pMapper = Mappers.getMapper(PersonMapper.class);
 

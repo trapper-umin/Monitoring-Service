@@ -228,7 +228,7 @@ public class SessionCommandProcessor {
                     }
                 }
 
-            } catch (NotFoundException | CanNotDoException e) {
+            } catch (NotFoundException | CanNotDoException | ProblemWithSQLException e) {
                 printer.show(e.getMessage());
                 logger.logEventUsernameRoleAndError("RIGHTS", credentials, e.getMessage(), role);
             }

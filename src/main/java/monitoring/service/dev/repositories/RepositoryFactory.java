@@ -1,6 +1,6 @@
 package monitoring.service.dev.repositories;
 
-import monitoring.service.dev.repositories.db.PeopleRepository;
+import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 
 public class RepositoryFactory {
 
