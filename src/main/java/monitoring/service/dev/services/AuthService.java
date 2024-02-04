@@ -1,5 +1,6 @@
 package monitoring.service.dev.services;
 
+import java.util.ArrayList;
 import monitoring.service.dev.common.Role;
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.Person;
@@ -10,31 +11,21 @@ import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.validations.PersonPasswordValidation;
 import monitoring.service.dev.utils.validations.PersonUsernameValidation;
 
-import java.util.ArrayList;
-
 public class AuthService {
 
-    private static final PersonUsernameValidation puValidation = PersonUsernameValidation.getInstance();
-    private static final PersonPasswordValidation ppValidation = PersonPasswordValidation.getInstance();
-    private static final IPeopleRepository repository = RepositoryFactory.getRepository();
+    private static final PersonUsernameValidation usernameValidation = PersonUsernameValidation.getInstance();
+    private static final PersonPasswordValidation passwordValidation = PersonPasswordValidation.getInstance();
+    private final IPeopleRepository repository;
 
-    private static AuthService instance;
-
-    private AuthService(){}
-
-    public static AuthService getInstance(){
-        if(instance==null){
-            instance= new AuthService();
-        }
-        return instance;
+    public AuthService(IPeopleRepository repository){
+        this.repository = repository;
     }
 
     /**
-     * Registers a new person in the system using the provided credentials.
-     * The method performs validation of the username and password using
-     * defined validation rules. It then creates a new Person object with
-     * default values for first name, last name, age, and an empty list of sensors.
-     * The new person is assigned the role of USER.
+     * Registers a new person in the system using the provided credentials. The method performs
+     * validation of the username and password using defined validation rules. It then creates a new
+     * Person object with default values for first name, last name, age, and an empty list of
+     * sensors. The new person is assigned the role of USER.
      *
      * @param credentials The credentials object containing the username and password.
      * @return The newly created Person object with registered details.
@@ -43,31 +34,25 @@ public class AuthService {
     public Person registration(CredentialsDTO credentials) {
 
         String username = credentials.getUsername();
-        puValidation.valid(credentials);
+        usernameValidation.valid(credentials);
 
         String password = credentials.getPassword();
-        ppValidation.valid(credentials);
+        passwordValidation.valid(credentials);
 
-        Person person = Person.builder()
-                .username(username)
-                .password(password)
-                .sensors(new ArrayList<>())
-                .role(Role.USER)
-                .build();
+        Person person = Person.builder().username(username).password(password)
+            .sensors(new ArrayList<>()).role(Role.USER).build();
 
-        repository.registration(person);
-
-        return person;
+        return repository.registration(person);
     }
 
     public Person authentication(CredentialsDTO credentials) {
 
         String username = credentials.getUsername();
-        Person person = repository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("user with username '"+username+"' was not found"));
+        Person person = repository.findByUsername(username).orElseThrow(
+            () -> new NotFoundException("user with username '" + username + "' was not found"));
 
         String password = credentials.getPassword();
-        if(!password.equals(person.getPassword())){
+        if (!password.equals(person.getPassword())) {
             throw new NotValidException("incorrect password");
         }
 

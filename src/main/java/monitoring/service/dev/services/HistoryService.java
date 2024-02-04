@@ -6,16 +6,16 @@ import monitoring.service.dev.repositories.localstorage.HistoryRepository;
 
 import java.util.List;
 
-public class PeopleHistoryService {
+public class HistoryService {
 
-    private static PeopleHistoryService instance;
+    private static HistoryService instance;
     private static final HistoryRepository repository = HistoryRepository.getInstance();
 
-    private PeopleHistoryService(){}
+    private HistoryService(){}
 
-    public static PeopleHistoryService getInstance(){
+    public static HistoryService getInstance(){
         if(instance==null){
-            instance = new PeopleHistoryService();
+            instance = new HistoryService();
         }
         return instance;
     }

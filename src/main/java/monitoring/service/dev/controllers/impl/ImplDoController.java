@@ -4,15 +4,19 @@ import monitoring.service.dev.controllers.interfaces.IDoController;
 import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.History;
+import monitoring.service.dev.repositories.db.PeopleRepository;
+import monitoring.service.dev.repositories.db.ReadingsRepository;
 import monitoring.service.dev.services.DoService;
-import monitoring.service.dev.services.PeopleHistoryService;
+import monitoring.service.dev.services.HistoryService;
 
 import java.util.List;
 
 public abstract class ImplDoController implements IDoController {
 
-    private static final DoService service = DoService.getInstance();
-    private static final PeopleHistoryService phService = PeopleHistoryService.getInstance();
+    private final PeopleRepository peopleRepository = new PeopleRepository();
+    private final ReadingsRepository readingsRepository = new ReadingsRepository();
+    private final DoService service = new DoService(peopleRepository, readingsRepository);
+    private static final HistoryService phService = HistoryService.getInstance();
 
     @Override
     public List<SensorDTO> getCurrentReadings(CredentialsDTO credentials) {

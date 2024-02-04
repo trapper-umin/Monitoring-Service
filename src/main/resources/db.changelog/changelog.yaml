@@ -23,3 +23,6 @@ databaseChangeLog:
   - include:
       file: migrations/008-insert-person.yaml
       relativeToChangelogFile: true
+  - include:
+      file: migrations/009-create-function-save-sensor-reading.yaml
+      relativeToChangelogFile: true

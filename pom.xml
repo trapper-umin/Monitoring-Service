@@ -5,7 +5,7 @@
 
 	<groupId>dev.ylab.com</groupId>
 	<artifactId>Monitoring-Service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>2.0.2</version>
 	<name>Monitoring-Service</name>
 	<description>web service for providing readings of heating, hot and cold water meters</description>
 

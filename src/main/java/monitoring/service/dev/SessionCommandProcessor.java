@@ -28,6 +28,7 @@ import monitoring.service.dev.utils.exceptions.CanNotDoException;
 import monitoring.service.dev.utils.exceptions.MeterReadingExistsException;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
+import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 
 public class SessionCommandProcessor {
 
@@ -81,19 +82,23 @@ public class SessionCommandProcessor {
             history.push(credentials);
             logger.logEventSubmitSuccess(credentials);
 
-            printer.showSuccess();
-
         } catch (NumberFormatException | DateTimeParseException e) {
             printer.showCorrectSubmit();
             logger.logEventUsernameAndError("SUBMIT", credentials, e.getMessage());
-        } catch (NotValidException | MeterReadingExistsException | NotFoundException e) {
+        } catch (NotValidException | MeterReadingExistsException | NotFoundException |
+                 ProblemWithSQLException e) {
             printer.show(e);
             logger.logEventUsernameAndError("SUBMIT", credentials, e.getMessage());
         }
     }
 
     public void get(CredentialsDTO credentials) {
-        List<SensorDTO> sensors = doController.getCurrentReadings(credentials);
+        List<SensorDTO> sensors = new ArrayList<>();
+        try {
+            sensors = doController.getCurrentReadings(credentials);
+        }catch (ProblemWithSQLException e){
+            printer.show(e.getMessage());
+        }
         if (sensors.isEmpty()) {
             String message = "There are no current indicators";
             printer.show(message);
@@ -135,7 +140,7 @@ public class SessionCommandProcessor {
             printer.show(
                 "Invalid month: " + parsMonth + "\nExpected format: " + getExpectedMonthFormat());
             return;
-        }catch (NotValidException e){
+        }catch (NotValidException | ProblemWithSQLException e){
             printer.show(e.getMessage());
             return;
         }
