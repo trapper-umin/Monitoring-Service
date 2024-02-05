@@ -76,13 +76,18 @@ public class AdminRepositoryTest {
     }
 
     @Test
-    void testSetAuthoritiesChangesRoleToAdmin() throws Exception {
-        Person person = Person.builder().id(1).username("user1").password("pass1").role(Role.USER).build();
+    void testSetAuthoritiesChangesRoleToAdmin() {
+        Person person = Person.builder()
+            .id(1)
+            .username("user1")
+            .password("pass1")
+            .role(Role.USER)
+            .build();
         adminRepository.setAuthorities(person);
-        try (Connection conn = DriverManager.getConnection(postgresqlContainer.getJdbcUrl(),
+        try (Connection connection = DriverManager.getConnection(postgresqlContainer.getJdbcUrl(),
             postgresqlContainer.getUsername(),
-            postgresqlContainer.getPassword());
-            PreparedStatement stmt = conn.prepareStatement("SELECT role FROM person WHERE person_id = ?")) {
+            postgresqlContainer.getPassword()); PreparedStatement stmt = connection.prepareStatement(
+            "SELECT role FROM person WHERE person_id = ?")) {
 
             stmt.setInt(1, person.getId());
             try (ResultSet rs = stmt.executeQuery()) {
@@ -97,7 +102,12 @@ public class AdminRepositoryTest {
 
     @Test
     void testSetAuthoritiesThrowsExceptionForAdminRole() {
-        Person person = Person.builder().id(1).username("admin1").password("pass2").role(Role.ADMIN).build();
+        Person person = Person.builder()
+            .id(1)
+            .username("admin1")
+            .password("pass2")
+            .role(Role.ADMIN)
+            .build();
         assertThrows(CanNotDoException.class, () -> adminRepository.setAuthorities(person));
     }
 }

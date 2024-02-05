@@ -18,6 +18,22 @@ public class PeopleRepository implements IPeopleRepository {
     private static final String FIND_BY_USERNAME_QUERY = "SELECT * FROM person WHERE username=?;";
     private static final String GET_PERSON_ID_QUERY = "SELECT person_id FROM person WHERE username=?;";
 
+    /**
+     * Регистрирует нового пользователя в системе.
+     * <p>
+     * Этот метод создаёт новую запись пользователя в базе данных, используя данные, предоставленные в объекте {@link Person}.
+     * Всем пользователям по умолчанию присваивается роль {@link Role#USER}. Метод выполняет SQL-запрос
+     * для добавления пользователя с указанными именем пользователя и паролем. В случае успешной регистрации
+     * метод возвращает объект {@link Person}, содержащий информацию о пользователе. Транзакция подтверждается
+     * при успешном выполнении.
+     * <p>
+     * Если в процессе возникает исключение SQL, транзакция откатывается, и выбрасывается исключение
+     * {@link ProblemWithSQLException}, указывающее на проблему с процессом регистрации.
+     *
+     * @param person Объект {@link Person}, содержащий информацию для регистрации пользователя.
+     * @return Объект {@link Person} после успешной регистрации.
+     * @throws ProblemWithSQLException если при выполнении SQL-запроса на регистрацию возникли проблемы.
+     */
     @Override
     public Person registration(Person person) {
         try (Connection connection = DriverManager.getConnection(AppConstants.JDBC_URL,
@@ -40,6 +56,22 @@ public class PeopleRepository implements IPeopleRepository {
         }
     }
 
+    /**
+     * Ищет пользователя по имени пользователя.
+     * <p>
+     * Этот метод выполняет поиск в базе данных для нахождения пользователя с указанным именем пользователя.
+     * Если пользователь найден, возвращается {@link Optional} с объектом {@link Person},
+     * содержащим всю доступную информацию о пользователе, включая его идентификатор, имя пользователя,
+     * пароль и роль. Если пользователь не найден, возвращается пустой {@link Optional}.
+     * <p>
+     * Метод использует предопределённый SQL-запрос {@code FIND_BY_USERNAME_QUERY} для извлечения данных пользователя.
+     * В случае возникновения SQL-исключения выбрасывается исключение {@link ProblemWithSQLException},
+     * сигнализирующее о проблеме с аутентификацией. Это исключение должно быть обработано на более высоком уровне.
+     *
+     * @param username Имя пользователя, по которому осуществляется поиск.
+     * @return {@link Optional<Person>} с объектом пользователя, если таковой найден, или пустой {@link Optional}, если пользователь не найден.
+     * @throws ProblemWithSQLException если в процессе выполнения запроса произошла ошибка.
+     */
     @Override
     public Optional<Person> findByUsername(String username) {
         Person person = null;
@@ -65,6 +97,21 @@ public class PeopleRepository implements IPeopleRepository {
         }
     }
 
+    /**
+     * Возвращает идентификатор пользователя по его имени пользователя.
+     * <p>
+     * Этот метод выполняет запрос к базе данных для получения идентификатора пользователя на основе
+     * предоставленного имени пользователя. Если пользователь с таким именем существует, метод возвращает его идентификатор.
+     * В противном случае возвращает 0. Метод предполагает, что имена пользователей уникальны в системе.
+     * <p>
+     * Использует предопределённый SQL-запрос {@code GET_PERSON_ID_QUERY} для выполнения поиска.
+     * При возникновении SQL-исключения выбрасывается исключение {@link ProblemWithSQLException},
+     * указывающее на проблемы при выполнении запроса.
+     *
+     * @param username Имя пользователя, для которого требуется найти идентификатор.
+     * @return Идентификатор пользователя или 0, если пользователь с таким именем не найден.
+     * @throws ProblemWithSQLException если произошла ошибка при выполнении запроса к базе данных.
+     */
     public int getIdByUsername(String username) {
         int id = 0;
         try (Connection connection = DriverManager.getConnection(AppConstants.JDBC_URL,
