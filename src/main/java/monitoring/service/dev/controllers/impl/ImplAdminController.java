@@ -1,6 +1,7 @@
 package monitoring.service.dev.controllers.impl;
 
 import java.util.List;
+import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.controllers.interfaces.IAdminController;
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
 import monitoring.service.dev.models.Audit;
@@ -13,7 +14,8 @@ import monitoring.service.dev.services.AuditService;
 public abstract class ImplAdminController implements IAdminController {
 
     private final PeopleRepository peopleRepository = new PeopleRepository();
-    private final AdminRepository adminRepository = new AdminRepository();
+    private final AdminRepository adminRepository = new AdminRepository(
+        AppConstants.JDBC_URL, AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD);
     private final AuditRepository auditRepository = new AuditRepository();
     private final AdminService adminService = new AdminService(peopleRepository, adminRepository);
     private final AuditService auditService = new AuditService(auditRepository);

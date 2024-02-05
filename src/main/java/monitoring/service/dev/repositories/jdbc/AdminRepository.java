@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import monitoring.service.dev.common.Role;
-import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IAdminRepository;
 import monitoring.service.dev.utils.exceptions.CanNotDoException;
@@ -24,12 +23,20 @@ public class AdminRepository implements IAdminRepository {
         UPDATE person SET role=? WHERE person_id=?;
         """;
 
+    private final String url;
+    private final String username;
+    private final String password;
+
+    public AdminRepository(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
     public List<Person> getAllUsers() {
         List<Person> people = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(AppConstants.JDBC_URL,
-            AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD);
+        try (Connection connection = DriverManager.getConnection(url, username, password);
             PreparedStatement statement = connection.prepareStatement(
             GET_ALL_USERS_QUERY); ResultSet resultSet = statement.executeQuery()) {
 
@@ -68,10 +75,8 @@ public class AdminRepository implements IAdminRepository {
     }
 
     private void setRole(int id, Role role) throws ProblemWithSQLException {
-        try (Connection connection = DriverManager.getConnection(AppConstants.JDBC_URL,
-            AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD);
-            PreparedStatement statement = connection.prepareStatement(
-            SET_ROLE_QUERY)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement statement = connection.prepareStatement(SET_ROLE_QUERY)) {
 
             connection.setAutoCommit(false);
 

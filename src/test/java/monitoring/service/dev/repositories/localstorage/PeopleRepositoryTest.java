@@ -1,4 +1,4 @@
-package monitoring.service.dev.repositories;
+package monitoring.service.dev.repositories.localstorage;
 
 import monitoring.service.dev.common.SensorType;
 import monitoring.service.dev.models.Reading;
