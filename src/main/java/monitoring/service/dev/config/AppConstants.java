@@ -6,6 +6,7 @@ public class AppConstants {
     public static final String JDBC_URL = EnvLoader.load("jdbc.url");
     public static final String JDBC_USERNAME = EnvLoader.load("jdbc.username");
     public static final String JDBC_PASSWORD = EnvLoader.load("jdbc.password");
+    public static final String DEFAULT_LIQUIBASE_SCHEMA = "liquibase";
     //    public static final String JDBC_URL = System.getenv("JDBC_URL");
 //    public static final String JDBC_USERNAME = System.getenv("JDBC_USERNAME");
 //    public static final String JDBC_PASSWORD = System.getenv("JDBC_PASSWORD");

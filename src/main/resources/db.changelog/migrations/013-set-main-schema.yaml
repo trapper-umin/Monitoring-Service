@@ -3,4 +3,4 @@ databaseChangeLog:
       id: 013-set-main-schema
       author: trapper
       changes:
-        - sql: ALTER DATABASE postgres SET search_path TO entities;
+        - sql: ALTER DATABASE "monitoring-service-db" SET search_path TO entities;

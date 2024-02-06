@@ -2,7 +2,12 @@
 - Выполните `docker-compose build` и `docker-compose up` для развертывания бд
 - Сначала выполните команду `mvn clean install` для компиляции кода в jar файл
 - Далее выполните команду `java -jar .\target\Monitoring-Service-2.1.0.jar` для запуска jar файла
-  
+
+### PR
+
+- [Dev/task1 -> main #1](https://github.com/trapper-umin/Monitoring-Service/pull/2) 
+- [Dev/task2 -> main #2](https://github.com/trapper-umin/Monitoring-Service/pull/3)
+
 ### Stack
 - Java 17
 - JUnit 5
