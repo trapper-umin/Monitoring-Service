@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-migrate-entities-to-new-schema
+      author: trapper
+      changes:
+        - sql: ALTER TABLE liquibase.person SET SCHEMA entities;
+        - sql: ALTER TABLE liquibase.sensor SET SCHEMA entities;
+        - sql: ALTER TABLE liquibase.reading SET SCHEMA entities;
+        - sql: ALTER TABLE liquibase.history SET SCHEMA entities;
+        - sql: ALTER TABLE liquibase.audit SET SCHEMA entities;

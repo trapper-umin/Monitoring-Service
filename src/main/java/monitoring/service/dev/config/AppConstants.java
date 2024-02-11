@@ -1,6 +1,15 @@
 package monitoring.service.dev.config;
 
+import monitoring.service.dev.utils.EnvLoader;
+
 public class AppConstants {
+    public static final String JDBC_URL = EnvLoader.load("jdbc.url");
+    public static final String JDBC_USERNAME = EnvLoader.load("jdbc.username");
+    public static final String JDBC_PASSWORD = EnvLoader.load("jdbc.password");
+    public static final String DEFAULT_LIQUIBASE_SCHEMA = "liquibase";
+    //    public static final String JDBC_URL = System.getenv("JDBC_URL");
+//    public static final String JDBC_USERNAME = System.getenv("JDBC_USERNAME");
+//    public static final String JDBC_PASSWORD = System.getenv("JDBC_PASSWORD");
     public static final String COMMAND_REGISTER = "/register";
     public static final String COMMAND_LOGIN = "/login";
     public static final String COMMAND_EXIT = "/exit";
@@ -22,4 +31,5 @@ public class AppConstants {
     public static final String DOWNGRADE = "downgrade";
     public static final int MIN_YEAR_BORDER = 1900;
     public static final int MAX_YEAR_BORDER = 2500;
+    public static final int AMOUNT_OF_PARAMS_IN_SUBMIT = 4;
 }

@@ -6,10 +6,11 @@ public class AuthController extends ImplAuthController {
 
     private static AuthController instance;
 
-    private AuthController(){}
+    private AuthController() {
+    }
 
-    public static AuthController getInstance(){
-        if(instance==null){
+    public static AuthController getInstance() {
+        if (instance == null) {
             instance = new AuthController();
         }
         return instance;

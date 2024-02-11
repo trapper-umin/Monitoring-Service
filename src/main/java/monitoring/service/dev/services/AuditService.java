@@ -1,30 +1,27 @@
 package monitoring.service.dev.services;
 
-import monitoring.service.dev.models.Audit;
-import monitoring.service.dev.repositories.AuditRepository;
-
 import java.util.List;
+import monitoring.service.dev.models.Audit;
+import monitoring.service.dev.repositories.IAuditRepository;
+import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 
 public class AuditService {
 
-    private static AuditService instance;
-    private static final AuditRepository repository = AuditRepository.getInstance();
+    private final IAuditRepository repository;
 
-    private AuditService(){}
-
-    public static AuditService getInstance() {
-        if (instance == null) {
-            instance = new AuditService();
-        }
-        return instance;
+    public AuditService(IAuditRepository repository) {
+        this.repository = repository;
     }
-
 
     public List<Audit> getAudit() {
         return repository.get();
     }
 
     public void postAudit(Audit audit) {
-        repository.push(audit);
+        try {
+            repository.push(audit);
+        } catch (ProblemWithSQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

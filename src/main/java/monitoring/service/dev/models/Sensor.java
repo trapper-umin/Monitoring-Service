@@ -13,12 +13,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Sensor {
 
+    private int id;
+
     private SensorType type;
 
-    private List<MeterReading> readings = new ArrayList<>();
+    private List<Reading> readings = new ArrayList<>();
 
-    public void addReadings(List<MeterReading> newReadings) {
-        List<MeterReading> modifiableList = new ArrayList<>(newReadings);
+    public void addReadings(List<Reading> newReadings) {
+        List<Reading> modifiableList = new ArrayList<>(newReadings);
         this.readings.addAll(modifiableList);
     }
 }

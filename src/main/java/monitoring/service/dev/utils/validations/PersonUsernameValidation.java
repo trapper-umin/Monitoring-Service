@@ -1,7 +1,7 @@
 package monitoring.service.dev.utils.validations;
 
 import monitoring.service.dev.dtos.requests.CredentialsDTO;
-import monitoring.service.dev.repositories.PeopleRepository;
+import monitoring.service.dev.repositories.localstorage.PeopleRepository;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.validations.common.IValidator;
 
@@ -11,34 +11,35 @@ public class PersonUsernameValidation implements IValidator<CredentialsDTO> {
 
     private static PersonUsernameValidation instance;
 
-    private PersonUsernameValidation(){}
+    private PersonUsernameValidation() {
+    }
 
-    public static PersonUsernameValidation getInstance(){
-        if(instance==null){
-            instance=new PersonUsernameValidation();
+    public static PersonUsernameValidation getInstance() {
+        if (instance == null) {
+            instance = new PersonUsernameValidation();
         }
         return instance;
     }
 
     PeopleRepository peopleRepository = PeopleRepository.getInstance();
 
-    public void valid(CredentialsDTO credentials){
+    public void valid(CredentialsDTO credentials) {
         String username = credentials.getUsername();
 
         Objects.requireNonNull(username, "username should not be null");
 
         String trimmedUsername = username.trim();
-        if(trimmedUsername.isEmpty()) {
+        if (trimmedUsername.isEmpty()) {
             throw new NotValidException("username should not be empty");
         }
-        if(trimmedUsername.length() > 16) {
+        if (trimmedUsername.length() > 16) {
             throw new NotValidException("username must be less than or equal to 16 characters");
         }
-        if(!username.matches("[a-zA-Z0-9]+")){
+        if (!username.matches("[a-zA-Z0-9]+")) {
             throw new NotValidException("username should only contain Latin letters and digits");
         }
         boolean isUsernameTaken = peopleRepository.findByUsername(username).isPresent();
-        if(isUsernameTaken) {
+        if (isUsernameTaken) {
             throw new NotValidException("username should be unique");
         }
     }

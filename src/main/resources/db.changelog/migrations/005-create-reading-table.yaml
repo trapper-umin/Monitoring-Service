@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-create-reading-table
+      author: trapper
+      changes:
+        - createTable:
+            tableName: reading
+            columns:
+              - column:
+                  name: reading_id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: sensor_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_reading_sensor
+                    references: sensor(sensor_id)
+                    deleteCascade: true
+              - column:
+                  name: indication
+                  type: float8
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: timestamp
+                  constraints:
+                    nullable: false

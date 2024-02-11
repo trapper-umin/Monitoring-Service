@@ -6,10 +6,11 @@ public class AdminController extends ImplAdminController {
 
     private static AdminController instance;
 
-    private AdminController(){}
+    private AdminController() {
+    }
 
-    public static AdminController getInstance(){
-        if(instance==null){
+    public static AdminController getInstance() {
+        if (instance == null) {
             instance = new AdminController();
         }
         return instance;

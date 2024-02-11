@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+#  app:
+#    build: .
+#    depends_on:
+#      - db
+#    environment:
+#      JDBC_URL: jdbc:postgresql://db:5432/postgres
+#      JDBC_USERNAME: trapper
+#      JDBC_PASSWORD: 9qwe1ox
+
+  db:
+    container_name: postgres-db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: monitoring-service-db
+      POSTGRES_USER: trapper
+      POSTGRES_PASSWORD: 9qwe1ox
+    ports:
+      - "5433:5432"

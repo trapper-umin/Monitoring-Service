@@ -8,18 +8,18 @@ public class PersonPasswordValidation implements IValidator<CredentialsDTO> {
 
     private static PersonPasswordValidation instance;
 
-    private PersonPasswordValidation(){
+    private PersonPasswordValidation() {
 
     }
 
-    public static PersonPasswordValidation getInstance(){
-        if(instance==null){
-            instance=new PersonPasswordValidation();
+    public static PersonPasswordValidation getInstance() {
+        if (instance == null) {
+            instance = new PersonPasswordValidation();
         }
         return instance;
     }
 
-    public void valid(CredentialsDTO credentials){
+    public void valid(CredentialsDTO credentials) {
         String password = credentials.getPassword();
 
         if (password == null || password.trim().isEmpty()) {
