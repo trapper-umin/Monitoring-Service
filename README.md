@@ -4,9 +4,9 @@
 - Далее выполните команду `java -jar .\target\Monitoring-Service-2.1.0.jar` для запуска jar файла
 
 ### PR
-
-- [Dev/task1 -> main #1](https://github.com/trapper-umin/Monitoring-Service/pull/2) 
-- [Dev/task2 -> main #2](https://github.com/trapper-umin/Monitoring-Service/pull/3)
+- [Dev/task1 -> main #1 (CLI)](https://github.com/trapper-umin/Monitoring-Service/pull/2) 
+- [Dev/task2 -> main #2 (JDBC, LIQUIBASE)](https://github.com/trapper-umin/Monitoring-Service/pull/3)
+- [Dev/task3 -> main #3 (Servlet API, AOP)]()
 
 ### Stack
 - Java 17
