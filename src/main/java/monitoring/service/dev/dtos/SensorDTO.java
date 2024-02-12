@@ -15,5 +15,5 @@ public class SensorDTO implements CommonDTO {
 
     private SensorType type;
 
-    List<MeterReadingDTO> readings;
+    List<ReadingDTO> readings;
 }

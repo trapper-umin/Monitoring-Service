@@ -5,7 +5,8 @@
 
 	<groupId>dev.ylab.com</groupId>
 	<artifactId>Monitoring-Service</artifactId>
-	<version>2.1.0</version>
+	<version>3.0.1</version>
+	<packaging>war</packaging>
 	<name>Monitoring-Service</name>
 	<description>web service for providing readings of heating, hot and cold water meters</description>
 
@@ -14,6 +15,9 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 
+		<servlet.version>4.0.1</servlet.version>
+		<jackson.version>2.15.2</jackson.version>
+		<jjwt.version>0.9.1</jjwt.version>
 		<lombok.version>1.18.28</lombok.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<postgresql.driver.version>42.7.1</postgresql.driver.version>
@@ -27,8 +31,26 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.1</version>
+			<version>${servlet.version}</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>${jjwt.version}</version>
 		</dependency>
 
 		<dependency>
@@ -83,7 +105,6 @@
 			<scope>test</scope>
 		</dependency>
 
-
 	</dependencies>
 
 	<build>
@@ -97,7 +118,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>monitoring.service.dev.MonitoringServiceCLI</mainClass>
+							<mainClass>monitoring.service.dev.CLI.MonitoringServiceCLI</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -153,7 +174,7 @@
 						<configuration>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>monitoring.service.dev.MonitoringServiceCLI</mainClass>
+									<mainClass>monitoring.service.dev.CLI.MonitoringServiceCLI</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>

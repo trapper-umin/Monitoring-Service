@@ -1,10 +1,11 @@
 package monitoring.service.dev.utils.validations;
 
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.validations.common.IValidator;
 
-public class PersonPasswordValidation implements IValidator<CredentialsDTO> {
+public class PersonPasswordValidation implements IValidator<CredentialsDTOReqst> {
 
     private static PersonPasswordValidation instance;
 
@@ -19,7 +20,7 @@ public class PersonPasswordValidation implements IValidator<CredentialsDTO> {
         return instance;
     }
 
-    public void valid(CredentialsDTO credentials) {
+    public void valid(CredentialsDTOReqst credentials) {
         String password = credentials.getPassword();
 
         if (password == null || password.trim().isEmpty()) {

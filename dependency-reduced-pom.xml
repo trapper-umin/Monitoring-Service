@@ -3,8 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.ylab.com</groupId>
   <artifactId>Monitoring-Service</artifactId>
+  <packaging>war</packaging>
   <name>Monitoring-Service</name>
-  <version>2.1.0</version>
+  <version>3.0.1</version>
   <description>web service for providing readings of heating, hot and cold water meters</description>
   <build>
     <plugins>
@@ -15,7 +16,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>monitoring.service.dev.MonitoringServiceCLI</mainClass>
+              <mainClass>monitoring.service.dev.CLI.MonitoringServiceCLI</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -60,7 +61,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>monitoring.service.dev.MonitoringServiceCLI</mainClass>
+                  <mainClass>monitoring.service.dev.CLI.MonitoringServiceCLI</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -70,6 +71,12 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -132,14 +139,17 @@
     </dependency>
   </dependencies>
   <properties>
-    <lombok.version>1.18.28</lombok.version>
-    <maven.compiler.target>17</maven.compiler.target>
-    <postgresql.driver.version>42.7.1</postgresql.driver.version>
+    <servlet.version>4.0.1</servlet.version>
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     <java.version>17</java.version>
     <maven.compiler.source>17</maven.compiler.source>
-    <testcontainers.version>1.15.3</testcontainers.version>
     <liquibase.version>4.23.0</liquibase.version>
+    <jackson.version>2.15.2</jackson.version>
+    <lombok.version>1.18.28</lombok.version>
+    <maven.compiler.target>17</maven.compiler.target>
+    <postgresql.driver.version>42.7.1</postgresql.driver.version>
+    <jjwt.version>0.9.1</jjwt.version>
+    <testcontainers.version>1.15.3</testcontainers.version>
     <junit.version>5.10.0</junit.version>
   </properties>
 </project>

@@ -1,4 +1,4 @@
-package monitoring.service.dev;
+package monitoring.service.dev.CLI;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -15,9 +15,9 @@ import monitoring.service.dev.common.SensorType;
 import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.controllers.AdminController;
 import monitoring.service.dev.controllers.DoController;
-import monitoring.service.dev.dtos.MeterReadingDTO;
+import monitoring.service.dev.dtos.ReadingDTO;
 import monitoring.service.dev.dtos.SensorDTO;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.Audit;
 import monitoring.service.dev.models.History;
 import monitoring.service.dev.out.OutputManager;
@@ -49,7 +49,7 @@ public class SessionCommandProcessor {
         return instance;
     }
 
-    public void submit(CredentialsDTO credentials, String args) {
+    public void submit(CredentialsDTOResp credentials, String args) {
         Map<String, String> argsMap = ArgsParser.parseArgs(args);
 
         if (argsMap.size() < AppConstants.AMOUNT_OF_PARAMS_IN_SUBMIT) {
@@ -72,13 +72,13 @@ public class SessionCommandProcessor {
             YearMonth yearMonth = YearMonth.parse(date, formatter);
             LocalDateTime time = yearMonth.atDay(1).atStartOfDay();
 
-            MeterReadingDTO meterReadingDTO = MeterReadingDTO.builder().indication(indication)
+            ReadingDTO readingDTO = ReadingDTO.builder().indication(indication)
                 .date(time).build();
 
-            sensorDTO.getReadings().add(meterReadingDTO);
+            sensorDTO.getReadings().add(readingDTO);
             credentials.getSensors().add(sensorDTO);
 
-            doController.submitReading(credentials);
+            doController.submitReading(null); //TODO -> CredentialsDTOReqst
 
             history.push(credentials);
             logger.logEventSubmitSuccess(credentials);
@@ -93,10 +93,10 @@ public class SessionCommandProcessor {
         }
     }
 
-    public void get(CredentialsDTO credentials) {
+    public void get(CredentialsDTOResp credentials) {
         List<SensorDTO> sensors = new ArrayList<>();
         try {
-            sensors = doController.getCurrentReadings(credentials);
+            sensors = doController.getCurrentReadings(null); //TODO -> CredentialsDTOReqst
         } catch (ProblemWithSQLException e) {
             printer.show(e.getMessage());
         }
@@ -117,7 +117,7 @@ public class SessionCommandProcessor {
         }
     }
 
-    public void getMonthly(CredentialsDTO credentials, String args) {
+    public void getMonthly(CredentialsDTOResp credentials, String args) {
         Map<String, String> argsMap = ArgsParser.parseArgs(args);
 
         String parsMonth = argsMap.get(AppConstants.ARG_MONTH);
@@ -133,7 +133,7 @@ public class SessionCommandProcessor {
         try {
             month = Month.valueOf(parsMonth.toUpperCase(Locale.ENGLISH));
             Integer.parseInt(parsYear);
-            monthlyReadings = doController.getMonthlyReadings(credentials, parsMonth, parsYear);
+            monthlyReadings = doController.getMonthlyReadings(null, parsMonth, parsYear); //TODO -> CredentialsDTOReqst
         } catch (NumberFormatException e) {
             printer.show("Invalid year: " + parsYear);
             return;
@@ -155,7 +155,7 @@ public class SessionCommandProcessor {
             printer.show("Readings for " + month + " " + parsYear + ":");
             for (SensorDTO sensor : monthlyReadings) {
                 printer.show("Sensor Type: " + sensor.getType());
-                for (MeterReadingDTO reading : sensor.getReadings()) {
+                for (ReadingDTO reading : sensor.getReadings()) {
                     printer.show(
                         " - Indication: " + reading.getIndication() + ", Date: " + reading.getDate()
                             .toLocalDate());
@@ -177,8 +177,8 @@ public class SessionCommandProcessor {
         return month.toString();
     }
 
-    public void history(CredentialsDTO credentials) {
-        List<History> histories = doController.getHistory(credentials);
+    public void history(CredentialsDTOResp credentials) {
+        List<History> histories = doController.getHistory(null); //TODO -> CredentialsDTOReqst
         if (histories.isEmpty()) {
             String message = "There are no actions";
             printer.show(message);
@@ -195,7 +195,7 @@ public class SessionCommandProcessor {
         }
     }
 
-    public void rights(Role role, CredentialsDTO credentials, String args) {
+    public void rights(Role role, CredentialsDTOResp credentials, String args) {
         if (role == Role.ADMIN) {
             Map<String, String> argsMap = ArgsParser.parseArgs(args);
 
@@ -235,8 +235,8 @@ public class SessionCommandProcessor {
             }
 
             printer.show("Users and their rights after changes: ");
-            List<CredentialsDTO> credentialsDTOS = adminController.getAllUsers();
-            for (CredentialsDTO user : credentialsDTOS) {
+            List<CredentialsDTOResp> credentialsDTOResps = adminController.getAllUsers();
+            for (CredentialsDTOResp user : credentialsDTOResps) {
                 printer.show(
                     " - USERNAME: " + (user.getUsername().equals(credentials.getUsername()) ?
                         user.getUsername() + " RIGHTS: " + user.getRole() + " - ITS YOU"
@@ -250,7 +250,7 @@ public class SessionCommandProcessor {
         }
     }
 
-    public void audit(Role role, CredentialsDTO credentials) {
+    public void audit(Role role, CredentialsDTOResp credentials) {
         if (role == Role.ADMIN) {
 
             List<Audit> audits = adminController.getAudit();
@@ -274,7 +274,7 @@ public class SessionCommandProcessor {
         }
     }
 
-    public boolean logout(CredentialsDTO credentials) {
+    public boolean logout(CredentialsDTOResp credentials) {
         boolean isSessionActive = false;
 
         printer.showLogout();

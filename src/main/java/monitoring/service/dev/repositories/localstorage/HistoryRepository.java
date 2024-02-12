@@ -3,7 +3,7 @@ package monitoring.service.dev.repositories.localstorage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.History;
 
 @Deprecated
@@ -26,7 +26,7 @@ public class HistoryRepository {
         historyDB.add(history);
     }
 
-    public List<History> get(CredentialsDTO credentials) {
+    public List<History> get(CredentialsDTOResp credentials) {
         String username = credentials.getUsername();
         return historyDB.stream().filter(h -> h.getUsername().equals(username))
             .collect(Collectors.toList());

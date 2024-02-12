@@ -1,5 +1,6 @@
 package monitoring.service.dev.utils.mappers;
 
+import java.util.List;
 import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.models.Sensor;
 import org.mapstruct.Mapper;
@@ -13,5 +14,6 @@ public interface SensorMapper {
     SensorDTO convertToSensorDTO(Sensor sensor);
 
     Sensor convertToSensor(SensorDTO sensorDTO);
+    List<SensorDTO> convertToSensorDTOList(List<Sensor> sensors);
 
 }

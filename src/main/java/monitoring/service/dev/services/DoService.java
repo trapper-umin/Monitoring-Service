@@ -3,7 +3,9 @@ package monitoring.service.dev.services;
 import java.util.List;
 import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.dtos.SensorDTO;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
+import monitoring.service.dev.dtos.requests.CredentialsDTOWithSensorReqst;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Sensor;
 import monitoring.service.dev.repositories.IPeopleRepository;
@@ -29,7 +31,7 @@ public class DoService {
         this.readingRepository = readingRepository;
     }
 
-    public List<SensorDTO> getCurrentReadings(CredentialsDTO credentials) {
+    public List<SensorDTO> getCurrentReadings(CredentialsDTOReqst credentials) {
         Person person = peopleRepository.findByUsername(credentials.getUsername()).orElseThrow(
             () -> new NotFoundException(
                 "user with username '" + credentials.getUsername() + "' was not found"));
@@ -39,7 +41,7 @@ public class DoService {
         return mapperForSensorList.convertToSensorDTOList(currentReadings);
     }
 
-    public List<SensorDTO> getMonthlyReadings(CredentialsDTO credentials, String month,
+    public List<SensorDTO> getMonthlyReadings(CredentialsDTOReqst credentials, String month,
         String year) {
         Person person = peopleRepository.findByUsername(credentials.getUsername()).orElseThrow(
             () -> new NotFoundException(
@@ -60,8 +62,8 @@ public class DoService {
         return mapperForSensorList.convertToSensorDTOList(monthlyReadings);
     }
 
-    public void submitReading(CredentialsDTO credentials) {
-        indicationValidation.valid(credentials.getSensors().get(0).getReadings().get(0));
+    public void submitReading(CredentialsDTOWithSensorReqst credentials) {
+        indicationValidation.valid(credentials.getSensor().getReading());
 
         readingRepository.submitReading(mapperForPerson.convertToPerson(credentials));
     }

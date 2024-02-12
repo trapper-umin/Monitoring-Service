@@ -3,7 +3,7 @@ package monitoring.service.dev.controllers.impl;
 import java.util.List;
 import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.controllers.interfaces.IAdminController;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.Audit;
 import monitoring.service.dev.repositories.jdbc.AdminRepository;
 import monitoring.service.dev.repositories.jdbc.AuditRepository;
@@ -21,7 +21,7 @@ public abstract class ImplAdminController implements IAdminController {
     private final AuditService auditService = new AuditService(auditRepository);
 
     @Override
-    public List<CredentialsDTO> getAllUsers() {
+    public List<CredentialsDTOResp> getAllUsers() {
         return adminService.getAllUsers();
     }
 

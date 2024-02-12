@@ -1,4 +1,4 @@
-package monitoring.service.dev;
+package monitoring.service.dev.CLI;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -6,7 +6,8 @@ import java.util.Scanner;
 import monitoring.service.dev.common.Role;
 import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.controllers.AuthController;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.out.OutputManager;
 import monitoring.service.dev.utils.ArgsParser;
@@ -46,7 +47,7 @@ public class InitialCommandProcessor {
         }
 
         try {
-            CredentialsDTO dto = CredentialsDTO.builder().username(username).password(password)
+            CredentialsDTOReqst dto = CredentialsDTOReqst.builder().username(username).password(password)
                 .build();
 
             Person person = auth.registration(dto);
@@ -70,7 +71,7 @@ public class InitialCommandProcessor {
         }
 
         try {
-            CredentialsDTO dto = CredentialsDTO.builder().username(username).password(password)
+            CredentialsDTOReqst dto = CredentialsDTOReqst.builder().username(username).password(password)
                 .build();
 
             Person person = auth.authentication(dto);
@@ -96,7 +97,7 @@ public class InitialCommandProcessor {
             printer.showAdminMenu();
         }
 
-        CredentialsDTO credentials = pMapper.convertToCredentialsDTO(person);
+        CredentialsDTOResp credentials = pMapper.convertToCredentialsDTO(person);
 
         boolean isSessionActive = true;
         while (isSessionActive) {

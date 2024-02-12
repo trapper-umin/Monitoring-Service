@@ -19,7 +19,7 @@ import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 
 public class ReadingsRepository implements IReadingsRepository {
 
-    private static final PeopleRepository peopleRepository = new PeopleRepository(); //TODO
+    private static final PeopleRepository peopleRepository = new PeopleRepository();
     private static final String GET_CURRENT_READINGS_QUERY = """
         SELECT
             s.type AS sensor_type,

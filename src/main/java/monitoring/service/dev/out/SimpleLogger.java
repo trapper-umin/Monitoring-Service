@@ -2,7 +2,7 @@ package monitoring.service.dev.out;
 
 import monitoring.service.dev.common.Role;
 import monitoring.service.dev.controllers.AdminController;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.Audit;
 import monitoring.service.dev.models.Person;
 
@@ -30,14 +30,14 @@ public class SimpleLogger {
                 .build());
     }
 
-    public void LogEventUsername(String action, CredentialsDTO credentials){
+    public void LogEventUsername(String action, CredentialsDTOResp credentials){
         adminController.postAudit(Audit.builder()
                 .log("["+LocalDateTime.now()+"]" + action + " SUCCESS" +
                         "\n - username: "+credentials.getUsername())
                 .build());
     }
 
-    public void logEventUsernameAndError(String action, CredentialsDTO credentials, String message){
+    public void logEventUsernameAndError(String action, CredentialsDTOResp credentials, String message){
         adminController.postAudit(Audit.builder()
                 .log("["+LocalDateTime.now()+"]" + action + " ERROR" +
                         "\n - username: "+credentials.getUsername()+
@@ -45,7 +45,7 @@ public class SimpleLogger {
                 .build());
     }
 
-    public void logEventUsernameRoleAndError(String action, CredentialsDTO credentials, String message, Role role){
+    public void logEventUsernameRoleAndError(String action, CredentialsDTOResp credentials, String message, Role role){
         adminController.postAudit(Audit.builder()
                 .log("["+LocalDateTime.now()+"]" + action + " ERROR" +
                         "\n - username: "+credentials.getUsername()+
@@ -55,7 +55,7 @@ public class SimpleLogger {
     }
 
 
-    public void logEventSubmitSuccess(CredentialsDTO credentials){
+    public void logEventSubmitSuccess(CredentialsDTOResp credentials){
         adminController.postAudit(Audit.builder()
                 .log("["+LocalDateTime.now()+"] SUBMIT SUCCESS" +
                         "\n - username: "+credentials.getUsername()+
@@ -65,7 +65,7 @@ public class SimpleLogger {
     }
 
 
-    public void logEventRightsToAdminSuccess(CredentialsDTO credentials, String username){
+    public void logEventRightsToAdminSuccess(CredentialsDTOResp credentials, String username){
         adminController.postAudit(Audit.builder()
                 .log("["+LocalDateTime.now()+"] RIGHTS SUCCESS" +
                         "\n - username: "+credentials.getUsername()+
@@ -74,7 +74,7 @@ public class SimpleLogger {
                 .build());
     }
 
-    public void logEventRightsToUserSuccess(CredentialsDTO credentials, String username){
+    public void logEventRightsToUserSuccess(CredentialsDTOResp credentials, String username){
         adminController.postAudit(Audit.builder()
                 .log("["+LocalDateTime.now()+"] RIGHTS SUCCESS" +
                         "\n - username: "+credentials.getUsername()+
@@ -83,7 +83,7 @@ public class SimpleLogger {
                 .build());
     }
 
-    public void logEventAuditSuccess(CredentialsDTO credentials){
+    public void logEventAuditSuccess(CredentialsDTOResp credentials){
         adminController.postAudit(Audit.builder()
                 .log("["+LocalDateTime.now()+"] AUDIT SUCCESS" +
                         "\n - username: "+credentials.getUsername()+

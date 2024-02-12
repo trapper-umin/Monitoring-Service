@@ -9,7 +9,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import monitoring.service.dev.config.AppConstants;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.History;
 import monitoring.service.dev.repositories.IHistoryRepository;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
@@ -25,7 +26,7 @@ public class HistoryRepository implements IHistoryRepository {
         """;
 
     @Override
-    public List<History> get(CredentialsDTO credentials) {
+    public List<History> get(CredentialsDTOReqst credentials) {
         List<History> histories = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(AppConstants.JDBC_URL,
             AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD);

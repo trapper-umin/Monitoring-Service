@@ -1,4 +1,4 @@
-package monitoring.service.dev;
+package monitoring.service.dev.CLI;
 
 import java.util.Scanner;
 import monitoring.service.dev.config.AppConstants;

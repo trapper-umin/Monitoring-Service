@@ -1,10 +1,10 @@
 package monitoring.service.dev.utils.validations;
 
-import monitoring.service.dev.dtos.MeterReadingDTO;
+import monitoring.service.dev.dtos.ReadingDTO;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.validations.common.IValidator;
 
-public class MeterReadingIndicationValidation implements IValidator<MeterReadingDTO> {
+public class MeterReadingIndicationValidation implements IValidator<ReadingDTO> {
 
     private static MeterReadingIndicationValidation instance;
 
@@ -19,7 +19,7 @@ public class MeterReadingIndicationValidation implements IValidator<MeterReading
     }
 
     @Override
-    public void valid(MeterReadingDTO meterReading) {
+    public void valid(ReadingDTO meterReading) {
         if (meterReading.getIndication() < 0) {
             throw new NotValidException("Indication should be greater than zero or equal");
         }

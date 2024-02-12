@@ -1,7 +1,7 @@
 package monitoring.service.dev.out;
 
 import monitoring.service.dev.controllers.DoController;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.History;
 
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ public class SimpleHistory {
 
     private static final DoController doController = DoController.getInstance();
 
-    public void push(CredentialsDTO credentials) {
+    public void push(CredentialsDTOResp credentials) {
         String username = credentials.getUsername();
         doController.pushHistory(History.builder().username(username).action(
                 "SUBMIT (" + credentials.getSensors().get(0).getType() + ") WITH READINGS: "
