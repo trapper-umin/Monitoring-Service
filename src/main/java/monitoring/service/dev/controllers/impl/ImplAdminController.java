@@ -11,7 +11,7 @@ import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 import monitoring.service.dev.services.AdminService;
 import monitoring.service.dev.services.AuditService;
 
-public abstract class ImplAdminController implements IAdminController {
+public class ImplAdminController implements IAdminController {
 
     private final PeopleRepository peopleRepository = new PeopleRepository();
     private final AdminRepository adminRepository = new AdminRepository(

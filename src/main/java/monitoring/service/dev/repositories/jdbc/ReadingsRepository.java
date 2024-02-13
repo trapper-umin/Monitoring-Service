@@ -61,7 +61,7 @@ public class ReadingsRepository implements IReadingsRepository {
         """;
 
     private static final String USE_FUNC_SAVE_SENSOR_READING_QUERY = """
-        SELECT save_sensor_reading(?, ?, ?, ?);
+        SELECT liquibase.save_sensor_reading(?, ?, ?, ?);
         """;
 
     /**

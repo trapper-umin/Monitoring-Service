@@ -54,6 +54,7 @@ public class ImplAuthController extends HttpServlet implements IAuthController {
             jackson.writeValue(resp.getOutputStream(),
                 TokenDTOResp.builder().token(jwtService.generate(person.getUsername())).build());
         } catch (Exception e) {
+            resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             try {
                 jackson.writeValue(resp.getOutputStream(),
