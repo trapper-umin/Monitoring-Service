@@ -1,0 +1,6 @@
+databaseChangeLog:
+  - changeSet:
+      id: 013-set-main-schema
+      author: trapper
+      changes:
+        - sql: ALTER DATABASE "monitoring-service-db" SET search_path TO entities;
