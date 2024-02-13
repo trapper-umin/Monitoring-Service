@@ -6,6 +6,7 @@ import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
 import monitoring.service.dev.dtos.requests.CredentialsDTOWithSensorReqst;
 import monitoring.service.dev.dtos.requests.SensorDTOWithOneReadingReqst;
 import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
+import monitoring.service.dev.dtos.responses.UserDTOResp;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Reading;
 import monitoring.service.dev.models.Sensor;
@@ -25,7 +26,7 @@ public interface PersonMapper {
 
     CredentialsDTOReqst convertToCredentialsDTOReqst(Person person);
 
-    List<CredentialsDTOResp> convertToCredentialsDTOList(List<Person> people);
+    List<UserDTOResp> convertToCredentialsDTOList(List<Person> people);
 
     @Mappings({
         @Mapping(source = "username", target = "username"),

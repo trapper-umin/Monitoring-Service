@@ -2,6 +2,7 @@ package monitoring.service.dev.services;
 
 import java.util.List;
 import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
+import monitoring.service.dev.dtos.responses.UserDTOResp;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IAdminRepository;
 import monitoring.service.dev.repositories.IPeopleRepository;
@@ -20,7 +21,7 @@ public class AdminService {
         this.adminRepository = adminRepository;
     }
 
-    public List<CredentialsDTOResp> getAllUsers() {
+    public List<UserDTOResp> getAllUsers() {
         return pMapper.convertToCredentialsDTOList(adminRepository.getAllUsers());
     }
 

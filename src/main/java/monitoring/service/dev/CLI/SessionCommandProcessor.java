@@ -18,6 +18,7 @@ import monitoring.service.dev.controllers.DoController;
 import monitoring.service.dev.dtos.ReadingDTO;
 import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
+import monitoring.service.dev.dtos.responses.UserDTOResp;
 import monitoring.service.dev.models.Audit;
 import monitoring.service.dev.models.History;
 import monitoring.service.dev.out.OutputManager;
@@ -235,8 +236,8 @@ public class SessionCommandProcessor {
             }
 
             printer.show("Users and their rights after changes: ");
-            List<CredentialsDTOResp> credentialsDTOResps = adminController.getAllUsers();
-            for (CredentialsDTOResp user : credentialsDTOResps) {
+            List<UserDTOResp> credentialsDTOResps = adminController.getAllUsers();
+            for (UserDTOResp user : credentialsDTOResps) {
                 printer.show(
                     " - USERNAME: " + (user.getUsername().equals(credentials.getUsername()) ?
                         user.getUsername() + " RIGHTS: " + user.getRole() + " - ITS YOU"

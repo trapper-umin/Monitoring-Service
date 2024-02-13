@@ -1,8 +1,8 @@
-package monitoring.service.dev.dtos.requests;
+package monitoring.service.dev.dtos.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,14 +15,12 @@ import monitoring.service.dev.dtos.common.CommonDTO;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommonReqst <E extends CommonDTO>{
+public class ErrorMessage implements CommonDTO {
 
     private int status;
-
-    private String message;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime time;
 
-    private List<E> body;
+    private String error;
 }
