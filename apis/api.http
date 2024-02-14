@@ -1,0 +1,60 @@
+###REGISTRATION
+POST http://localhost:8080/api/v1/users/register
+Content-Type: application/json
+
+{
+  "username": "root",
+  "password": "root"
+}
+
+###AUTHENTICATION
+POST http://localhost:8080/api/v1/users/authenticate
+Content-Type: application/json
+
+{
+  "username": "root",
+  "password": "root"
+}
+
+###SUBMIT
+POST http://localhost:8080/api/v1/readings/submit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQyOTg0LCJleHAiOjE3MDc5NDY1ODR9.gtXhMbSLP7VTuhK-9cM1RTrCeDtWombheq72HQGkQI8
+
+{
+  "sensor": "HOT",
+  "indication": 2.55,
+  "month": "January",
+  "year": "2020"
+}
+
+
+###GET CURRENT READINGS
+GET http://localhost:8080/api/v1/readings/current
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQyOTg0LCJleHAiOjE3MDc5NDY1ODR9.gtXhMbSLP7VTuhK-9cM1RTrCeDtWombheq72HQGkQI8
+
+###GET MONTHLY READINGS
+GET http://localhost:8080/api/v1/readings/monthly?month=January&year=2018
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQyOTg0LCJleHAiOjE3MDc5NDY1ODR9.gtXhMbSLP7VTuhK-9cM1RTrCeDtWombheq72HQGkQI8
+
+###HISTORY
+GET http://localhost:8080/api/v1/readings/history
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQyOTg0LCJleHAiOjE3MDc5NDY1ODR9.gtXhMbSLP7VTuhK-9cM1RTrCeDtWombheq72HQGkQI8
+
+###RIGHTS
+POST http://localhost:8080/api/v1/admins/rights
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQzNTgxLCJleHAiOjE3MDc5NDcxODF9.nnWHCIXz-Wxm3Clddcj5HYpur0Bnr20hEd4QONrsdBU
+
+{
+  "username": "root",
+  "action": "upgrade"
+}
+
+###AUDIT
+GET http://localhost:8080/api/v1/admins/audit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQzNTgxLCJleHAiOjE3MDc5NDcxODF9.nnWHCIXz-Wxm3Clddcj5HYpur0Bnr20hEd4QONrsdBU

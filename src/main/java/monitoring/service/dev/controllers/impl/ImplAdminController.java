@@ -109,6 +109,9 @@ public class ImplAdminController extends HttpServlet implements IAdminController
                     try {
                         AuthoritiesDTOReqst authorities = jackson.readValue(req.getInputStream(),
                             AuthoritiesDTOReqst.class);
+                        if(authorities.getUsername().equals(person.getUsername())){
+                            throw new IllegalArgumentException("You can't change your authorities");
+                        }
                         processRights(resp, authorities);
                     } catch (IOException e) {
                         throw new IllegalArgumentException("Invalid request body");
