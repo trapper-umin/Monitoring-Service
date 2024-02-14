@@ -15,7 +15,7 @@ public class AuditAspect {
     private final IAuditRepository repository = new AuditRepository();
     private final AuditService auditService = new AuditService(repository);
 
-    @Pointcut("execution(public * monitoring.service.dev.controllers.impl.*Controller.*(..))")
+    @Pointcut("@annotation(monitoring.service.dev.utils.annotations.DoAudit)")
     public void controllersAudit() {}
 
     @After("controllersAudit()")

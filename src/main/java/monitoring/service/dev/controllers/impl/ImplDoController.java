@@ -33,6 +33,7 @@ import monitoring.service.dev.repositories.jdbc.ReadingsRepository;
 import monitoring.service.dev.services.DoService;
 import monitoring.service.dev.services.HistoryService;
 import monitoring.service.dev.services.JWTService;
+import monitoring.service.dev.utils.annotations.DoAudit;
 import monitoring.service.dev.utils.exceptions.JWTException;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
@@ -59,17 +60,20 @@ public class ImplDoController extends HttpServlet implements IDoController {
         jackson.registerModule(new JavaTimeModule());
     }
 
+    @DoAudit
     @Override
     public List<SensorDTO> getCurrentReadings(CredentialsDTOReqst credentials) {
         return doService.getCurrentReadings(credentials);
     }
 
+    @DoAudit
     @Override
     public List<SensorDTO> getMonthlyReadings(CredentialsDTOReqst credentials, String month,
         String year) {
         return doService.getMonthlyReadings(credentials, month, year);
     }
 
+    @DoAudit
     @Override
     public List<History> getHistory(CredentialsDTOReqst credentials) {
         return historyService.get(credentials);
@@ -80,6 +84,7 @@ public class ImplDoController extends HttpServlet implements IDoController {
         historyService.push(history);
     }
 
+    @DoAudit
     @Override
     public void submitReading(CredentialsDTOWithSensorReqst credentials) {
         doService.submitReading(credentials);

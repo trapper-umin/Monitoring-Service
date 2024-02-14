@@ -15,6 +15,8 @@ import monitoring.service.dev.repositories.IPeopleRepository;
 import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 import monitoring.service.dev.services.AuthService;
 import monitoring.service.dev.services.JWTService;
+import monitoring.service.dev.utils.annotations.DoAudit;
+import monitoring.service.dev.utils.annotations.SpeedTest;
 
 @WebServlet("/auth/*")
 public class ImplAuthController extends HttpServlet implements IAuthController {
@@ -24,11 +26,15 @@ public class ImplAuthController extends HttpServlet implements IAuthController {
     private final JWTService jwtService = new JWTService(repository);
     private final ObjectMapper jackson = new ObjectMapper();
 
+    @DoAudit
+    @SpeedTest
     @Override
     public Person registration(CredentialsDTOReqst credentials) {
         return service.registration(credentials);
     }
 
+    @DoAudit
+    @SpeedTest
     @Override
     public Person authentication(CredentialsDTOReqst credentials) {
         return service.authentication(credentials);

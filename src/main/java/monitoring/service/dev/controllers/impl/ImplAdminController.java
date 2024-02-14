@@ -24,6 +24,7 @@ import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 import monitoring.service.dev.services.AdminService;
 import monitoring.service.dev.services.AuditService;
 import monitoring.service.dev.services.JWTService;
+import monitoring.service.dev.utils.annotations.DoAudit;
 import monitoring.service.dev.utils.exceptions.CanNotDoException;
 import monitoring.service.dev.utils.exceptions.JWTException;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
@@ -46,21 +47,25 @@ public class ImplAdminController extends HttpServlet implements IAdminController
     private final ObjectMapper jackson = new ObjectMapper();
     private final Sandler sandler = new Sandler(jackson);
 
+    @DoAudit
     @Override
     public List<UserDTOResp> getAllUsers() {
         return adminService.getAllUsers();
     }
 
+    @DoAudit
     @Override
     public void setAuthorities(String username) {
         adminService.setAuthorities(username);
     }
 
+    @DoAudit
     @Override
     public void deleteAuthorities(String username) {
         adminService.deleteAuthorities(username);
     }
 
+    @DoAudit
     @Override
     public List<Audit> getAudit() {
         return auditService.getAudit();
