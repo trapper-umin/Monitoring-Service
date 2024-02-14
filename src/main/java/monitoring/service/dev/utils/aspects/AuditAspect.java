@@ -15,17 +15,21 @@ public class AuditAspect {
     private final IAuditRepository repository = new AuditRepository();
     private final AuditService auditService = new AuditService(repository);
 
-    @Pointcut("execution(protected * monitoring.service.dev.controllers.impl.*Controller.*(..))")
+    @Pointcut("execution(public * monitoring.service.dev.controllers.impl.*Controller.*(..))")
     public void controllersAudit() {}
 
     @After("controllersAudit()")
     public void logAfter(JoinPoint joinPoint) {
-        String methodName = joinPoint.getSignature().getName();
-        String className = joinPoint.getTarget().getClass().getSimpleName();
+        try {
+            String methodName = joinPoint.getSignature().getName();
+            String className = joinPoint.getTarget().getClass().getSimpleName();
 
-        Audit audit = new Audit();
-        audit.setLog("Method " + methodName + " in " + className + " was called");
+            Audit audit = new Audit();
+            audit.setLog("Method " + methodName + " in " + className + " was called");
 
-        auditService.postAudit(audit);
+            auditService.postAudit(audit);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }

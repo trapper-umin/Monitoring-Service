@@ -1,10 +1,8 @@
 package monitoring.service.dev.controllers.interfaces;
 
-import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
+import java.util.List;
 import monitoring.service.dev.dtos.responses.UserDTOResp;
 import monitoring.service.dev.models.Audit;
-
-import java.util.List;
 
 public interface IAdminController {
 

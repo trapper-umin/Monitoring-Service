@@ -1,12 +1,10 @@
 package monitoring.service.dev.controllers.interfaces;
 
+import java.util.List;
 import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
 import monitoring.service.dev.dtos.requests.CredentialsDTOWithSensorReqst;
-import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.History;
-
-import java.util.List;
 
 public interface IDoController {
 
