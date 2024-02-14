@@ -112,7 +112,7 @@ public class InitialCommandProcessor {
 
             switch (command) {
                 case AppConstants.COMMAND_SUBMIT -> handler.submit(credentials, args);
-                case AppConstants.COMMAND_GET -> handler.get(credentials);
+                case AppConstants.COMMAND_CURRENT -> handler.get(credentials);
                 case AppConstants.COMMAND_GET_MONTHLY -> handler.getMonthly(credentials, args);
                 case AppConstants.COMMAND_HISTORY -> handler.history(credentials);
                 case AppConstants.COMMAND_RIGHTS -> handler.rights(role, credentials, args);

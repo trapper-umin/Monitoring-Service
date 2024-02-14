@@ -17,12 +17,12 @@ import monitoring.service.dev.common.SensorType;
 import monitoring.service.dev.controllers.interfaces.IDoController;
 import monitoring.service.dev.dtos.ReadingDTO;
 import monitoring.service.dev.dtos.SensorDTO;
-import monitoring.service.dev.dtos.responses.HistoryDTOResp;
-import monitoring.service.dev.dtos.responses.CommonResp;
 import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
 import monitoring.service.dev.dtos.requests.CredentialsDTOWithSensorReqst;
 import monitoring.service.dev.dtos.requests.SensorDTOWithOneReadingReqst;
 import monitoring.service.dev.dtos.requests.SensorReadingReqst;
+import monitoring.service.dev.dtos.responses.CommonResp;
+import monitoring.service.dev.dtos.responses.HistoryDTOResp;
 import monitoring.service.dev.dtos.responses.PersonWithSensorsAndReadingsDTOResp;
 import monitoring.service.dev.models.History;
 import monitoring.service.dev.models.Person;
@@ -41,23 +41,31 @@ import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 import monitoring.service.dev.utils.mappers.HistoryMapper;
 import monitoring.service.dev.utils.mappers.PersonMapper;
 import org.mapstruct.factory.Mappers;
+import monitoring.service.dev.config.AppConstants;
 
 @WebServlet("/do/*")
 public class ImplDoController extends HttpServlet implements IDoController {
 
-    private final PeopleRepository peopleRepository = new PeopleRepository();
-    private final ReadingsRepository readingsRepository = new ReadingsRepository();
-    private final HistoryRepository historyRepository = new HistoryRepository();
-    private final JWTService jwtService = new JWTService(peopleRepository);
-    private final DoService doService = new DoService(peopleRepository, readingsRepository);
-    private final HistoryService historyService = new HistoryService(historyRepository);
-    private final PersonMapper personMapper = Mappers.getMapper(PersonMapper.class);
-    private final HistoryMapper historyMapper = Mappers.getMapper(HistoryMapper.class);
-    private final ObjectMapper jackson = new ObjectMapper();
-    private final Sandler sandler = new Sandler(jackson);
+    private final JWTService jwtService;
+    private final DoService doService;
+    private final HistoryService historyService;
+    private final PersonMapper personMapper;
+    private final HistoryMapper historyMapper;
+    private final ObjectMapper jackson;
+    private final Sandler sandler;
 
     public ImplDoController() {
+        PeopleRepository peopleRepository = new PeopleRepository();
+        ReadingsRepository readingsRepository = new ReadingsRepository();
+        HistoryRepository historyRepository = new HistoryRepository();
+        this.jwtService = new JWTService(peopleRepository);
+        this.doService = new DoService(peopleRepository, readingsRepository);
+        this.historyService = new HistoryService(historyRepository);
+        this.personMapper = Mappers.getMapper(PersonMapper.class);
+        this.historyMapper = Mappers.getMapper(HistoryMapper.class);
+        this.jackson = new ObjectMapper();
         jackson.registerModule(new JavaTimeModule());
+        this.sandler = new Sandler(jackson);
     }
 
     @DoAudit
@@ -93,17 +101,11 @@ public class ImplDoController extends HttpServlet implements IDoController {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            String token = req.getHeader("Authorization");
-            if (token == null || !token.startsWith("Bearer ")) {
-                throw new IllegalArgumentException("Authorization token is required");
+            String token = jwtService.extractToken(req);
+            Person person = jwtService.validate(token);
+            if(!req.getPathInfo().equals(AppConstants.COMMAND_SUBMIT)){
+                throw new IllegalArgumentException("Unknown request path");
             }
-
-            token = token.substring(7);
-            Person person = validateToken(resp, token);
-            if (person == null) {
-                throw new IllegalArgumentException("Invalid or expired token");
-            }
-
             SensorReadingReqst readingRequest = jackson.readValue(req.getInputStream(),
                 SensorReadingReqst.class);
             CredentialsDTOWithSensorReqst credentials = mapPersonToCredentialsWithSensor(person,
@@ -116,9 +118,9 @@ public class ImplDoController extends HttpServlet implements IDoController {
                 .username(person.getUsername()).build());
 
             resp.setStatus(HttpServletResponse.SC_OK);
-        } catch (IllegalArgumentException | IOException e) {
+        } catch (IllegalArgumentException | NotFoundException | NotValidException | IOException e) {
             sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-        } catch (NotValidException | ProblemWithSQLException e) {
+        } catch (ProblemWithSQLException e) {
             sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                 e.getMessage());
         } catch (Exception e) {
@@ -129,91 +131,67 @@ public class ImplDoController extends HttpServlet implements IDoController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        String token = req.getHeader("Authorization");
-
-        if (token == null || !token.startsWith("Bearer ")) {
-            sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST,
-                "Authorization token is required");
-            return;
-        }
-
-        token = token.substring(7);
-        Person person = validateToken(resp, token);
-        if (person == null) {
-            return;
-        }
-
-        String path = req.getPathInfo();
-        CredentialsDTOReqst credentials = personMapper.convertToCredentialsDTOReqst(person);
-
-        switch (path) {
-            case "/current" -> processCurrentReadings(req, resp, credentials, person);
-            case "/monthly" -> processMonthlyReadings(req, resp, credentials, person);
-            case "/history" -> processHistory(resp, credentials);
-            default -> sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST,
-                "Unknown request path");
-        }
-    }
-
-    private void processCurrentReadings(HttpServletRequest req, HttpServletResponse resp,
-        CredentialsDTOReqst credentials, Person person) {
         try {
-            List<SensorDTO> currentReadings = getCurrentReadings(credentials);
-            sandler.sendSuccessResponse(resp,
-                PersonWithSensorsAndReadingsDTOResp.builder().status(HttpServletResponse.SC_OK)
-                    .operation("get current readings").time(LocalDateTime.now())
-                    .user(person.getUsername()).sensors(currentReadings).build());
-        } catch (NotFoundException e) {
+            String token = jwtService.extractToken(req);
+            Person person = jwtService.validate(token);
+
+            String path = req.getPathInfo();
+            CredentialsDTOReqst credentials = personMapper.convertToCredentialsDTOReqst(person);
+            switch (path) {
+                case AppConstants.COMMAND_CURRENT -> processCurrentReadings(resp, credentials, person);
+                case AppConstants.COMMAND_GET_MONTHLY -> processMonthlyReadings(req, resp, credentials, person);
+                case AppConstants.COMMAND_HISTORY -> processHistory(resp, credentials);
+                default -> throw new IllegalArgumentException("Unknown request path");
+            }
+        } catch (IllegalArgumentException | NotFoundException | NotValidException | JWTException e) {
             sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (ProblemWithSQLException e) {
             sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                 e.getMessage());
+        } catch (Exception e) {
+            sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                "An unexpected error occurred");
         }
+    }
+
+    private void processCurrentReadings(HttpServletResponse resp, CredentialsDTOReqst credentials,
+        Person person) throws NotFoundException, ProblemWithSQLException {
+
+        List<SensorDTO> currentReadings = getCurrentReadings(credentials);
+        sandler.sendSuccessResponse(resp,
+            PersonWithSensorsAndReadingsDTOResp.builder().status(HttpServletResponse.SC_OK)
+                .operation("get current readings").time(LocalDateTime.now())
+                .user(person.getUsername()).sensors(currentReadings).build());
     }
 
     private void processMonthlyReadings(HttpServletRequest req, HttpServletResponse resp,
-        CredentialsDTOReqst credentials, Person person) {
-        try {
-            String month = req.getParameter("month");
-            String year = req.getParameter("year");
-            List<SensorDTO> monthlyReadings = getMonthlyReadings(credentials, month, year);
-            sandler.sendSuccessResponse(resp,
-                PersonWithSensorsAndReadingsDTOResp.builder().status(HttpServletResponse.SC_OK)
-                    .operation("get readings for " + month + " " + year).time(LocalDateTime.now())
-                    .user(person.getUsername()).sensors(monthlyReadings).build());
-        } catch (NotFoundException | NotValidException e) {
-            sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-        } catch (ProblemWithSQLException e) {
-            sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                e.getMessage());
-        }
+        CredentialsDTOReqst credentials, Person person)
+        throws NotFoundException, NotValidException, ProblemWithSQLException {
+
+        String month = req.getParameter("month");
+        String year = req.getParameter("year");
+        List<SensorDTO> monthlyReadings = getMonthlyReadings(credentials, month, year);
+        sandler.sendSuccessResponse(resp,
+            PersonWithSensorsAndReadingsDTOResp.builder().status(HttpServletResponse.SC_OK)
+                .operation("get readings for " + month + " " + year).time(LocalDateTime.now())
+                .user(person.getUsername()).sensors(monthlyReadings).build());
     }
 
-    private void processHistory(HttpServletResponse resp, CredentialsDTOReqst credentials) {
-        try {
-            List<History> histories = getHistory(credentials);
-            List<HistoryDTOResp> historiesDTO = historyMapper.convertToHistoryDTOList(histories);
-            sandler.sendSuccessResponse(resp,
-                new CommonResp<>(HttpServletResponse.SC_OK,
-                    "histories of submitting for " + credentials.getUsername(), LocalDateTime.now(),
-                    historiesDTO));
-        } catch (ProblemWithSQLException e) {
-            sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                e.getMessage());
-        }
-    }
+    private void processHistory(HttpServletResponse resp, CredentialsDTOReqst credentials)
+        throws ProblemWithSQLException {
 
-    private Person validateToken(HttpServletResponse resp, String token) {
-        try {
-            return jwtService.validate(token);
-        } catch (NotFoundException | ProblemWithSQLException | JWTException e) {
-            sandler.sendErrorResponse(resp, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
-            return null;
-        }
+        List<History> histories = getHistory(credentials);
+        List<HistoryDTOResp> historiesDTO = historyMapper.convertToHistoryDTOList(histories);
+        sandler.sendSuccessResponse(resp, new CommonResp<>(HttpServletResponse.SC_OK,
+            "histories of submitting for " + credentials.getUsername(), LocalDateTime.now(),
+            historiesDTO));
     }
 
     private CredentialsDTOWithSensorReqst mapPersonToCredentialsWithSensor(Person person,
-        SensorReadingReqst request) {
+        SensorReadingReqst request) throws IllegalArgumentException {
+        if(request.getMonth().isEmpty() || request.getYear().isEmpty()){
+            throw new IllegalArgumentException("Some parameters are empty");
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM-yyyy", Locale.ENGLISH);
         String monthYear = request.getMonth() + "-" + request.getYear();
         YearMonth yearMonth;

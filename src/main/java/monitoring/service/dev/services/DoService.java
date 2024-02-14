@@ -51,10 +51,13 @@ public class DoService {
             throw new NotValidException(
                 "The month does not match the required pattern (e.g., 'January').");
         }
-
-        if (Integer.parseInt(year) < AppConstants.MIN_YEAR_BORDER
-            || Integer.parseInt(year) > AppConstants.MAX_YEAR_BORDER) {
-            throw new NotValidException("The year should be between 1900 and 2500");
+        try {
+            if (Integer.parseInt(year) < AppConstants.MIN_YEAR_BORDER
+                || Integer.parseInt(year) > AppConstants.MAX_YEAR_BORDER) {
+                throw new NotValidException("The year should be between 1900 and 2500");
+            }
+        }catch (NumberFormatException e){
+            throw new IllegalArgumentException("Some parameters are empty");
         }
 
         List<Sensor> monthlyReadings = readingRepository.getMonthlyReadings(person, month, year);

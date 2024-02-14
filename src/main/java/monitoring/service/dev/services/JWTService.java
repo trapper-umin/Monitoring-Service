@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IPeopleRepository;
@@ -50,5 +51,13 @@ public class JWTService {
         String username = getUsernameFromToken(token);
         return peopleRepository.findByUsername(username)
             .orElseThrow(()-> new NotFoundException("user with username '" + username + "' was not found"));
+    }
+
+    public String extractToken(HttpServletRequest req) throws IllegalArgumentException {
+        String token = req.getHeader("Authorization");
+        if (token == null || !token.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Authorization token is required");
+        }
+        return token.substring(7);
     }
 }

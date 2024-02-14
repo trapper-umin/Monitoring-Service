@@ -13,12 +13,12 @@ public class AppConstants {
     public static final String DEFAULT_LIQUIBASE_SCHEMA = "liquibase";
     public static final String SECRET_JWT_KEY = "2915b202c10079cbb9a0b1f21b831611fb592de67ca0c7632322371c89135f84";
     public static final int EXPIRATION_JWT_TIME = 3600000;
-    public static final String COMMAND_REGISTER = "/register";
+    public static final String COMMAND_REGISTER = "/reg";
     public static final String COMMAND_LOGIN = "/login";
     public static final String COMMAND_EXIT = "/exit";
     public static final String COMMAND_SUBMIT = "/submit";
-    public static final String COMMAND_GET = "/get";
-    public static final String COMMAND_GET_MONTHLY = "/getMonthly";
+    public static final String COMMAND_CURRENT = "/current";
+    public static final String COMMAND_GET_MONTHLY = "/monthly";
     public static final String COMMAND_HISTORY = "/history";
     public static final String COMMAND_RIGHTS = "/rights";
     public static final String COMMAND_AUDIT = "/audit";

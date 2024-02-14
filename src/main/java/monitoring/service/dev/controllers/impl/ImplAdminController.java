@@ -26,6 +26,7 @@ import monitoring.service.dev.services.AuditService;
 import monitoring.service.dev.services.JWTService;
 import monitoring.service.dev.utils.annotations.DoAudit;
 import monitoring.service.dev.utils.exceptions.CanNotDoException;
+import monitoring.service.dev.utils.exceptions.ForbiddenException;
 import monitoring.service.dev.utils.exceptions.JWTException;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
@@ -36,16 +37,25 @@ import org.mapstruct.factory.Mappers;
 @WebServlet("/admin/*")
 public class ImplAdminController extends HttpServlet implements IAdminController {
 
-    private final PeopleRepository peopleRepository = new PeopleRepository();
-    private final AdminRepository adminRepository = new AdminRepository(AppConstants.JDBC_URL,
-        AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD);
-    private final AuditRepository auditRepository = new AuditRepository();
-    private final AdminService adminService = new AdminService(peopleRepository, adminRepository);
-    private final AuditService auditService = new AuditService(auditRepository);
-    private final JWTService jwtService = new JWTService(peopleRepository);
-    private final AuditMapper auditMapper = Mappers.getMapper(AuditMapper.class);
-    private final ObjectMapper jackson = new ObjectMapper();
-    private final Sandler sandler = new Sandler(jackson);
+    private final AdminService adminService;
+    private final AuditService auditService;
+    private final JWTService jwtService;
+    private final AuditMapper auditMapper;
+    private final ObjectMapper jackson;
+    private final Sandler sandler;
+
+    public ImplAdminController() {
+        PeopleRepository peopleRepository = new PeopleRepository();
+        AdminRepository adminRepository = new AdminRepository(AppConstants.JDBC_URL,
+            AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD);
+        AuditRepository auditRepository = new AuditRepository();
+        this.adminService = new AdminService(peopleRepository, adminRepository);
+        this.auditService = new AuditService(auditRepository);
+        this.jwtService = new JWTService(peopleRepository);
+        this.auditMapper = Mappers.getMapper(AuditMapper.class);
+        this.jackson = new ObjectMapper();
+        this.sandler = new Sandler(jackson);
+    }
 
     @DoAudit
     @Override
@@ -87,86 +97,58 @@ public class ImplAdminController extends HttpServlet implements IAdminController
     }
 
     private void process(HttpServletRequest req, HttpServletResponse resp) {
-        String token = req.getHeader("Authorization");
-        if (token == null || !token.startsWith("Bearer ")) {
-            sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST,
-                "Authorization token is required");
-            return;
-        }
-
-        token = token.substring(7);
-        Person person = validateToken(resp, token);
-        if (person == null) {
-            return;
-        }
-
-        if (person.getRole().equals(Role.USER)) {
-            sandler.sendErrorResponse(resp, HttpServletResponse.SC_FORBIDDEN, "Forbidden");
-            return;
-        }
-
-        String path = req.getPathInfo();
-        switch (path) {
-            case "/rights" -> {
-                AuthoritiesDTOReqst authorities;
-                try {
-                    authorities = jackson.readValue(req.getInputStream(),
-                        AuthoritiesDTOReqst.class);
-                } catch (IOException e) {
-                    sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST,
-                        "Invalid request body");
-                    return;
+        try {
+            String token = jwtService.extractToken(req);
+            Person person = jwtService.validate(token);
+            if (person.getRole().equals(Role.USER)) {
+                throw new ForbiddenException("Forbidden");
+            }
+            String path = req.getPathInfo();
+            switch (path) {
+                case AppConstants.COMMAND_RIGHTS -> {
+                    try {
+                        AuthoritiesDTOReqst authorities = jackson.readValue(req.getInputStream(),
+                            AuthoritiesDTOReqst.class);
+                        processRights(resp, authorities);
+                    } catch (IOException e) {
+                        throw new IllegalArgumentException("Invalid request body");
+                    }
                 }
-                processRights(resp, authorities);
+                case AppConstants.COMMAND_AUDIT -> processAudit(resp);
+                default -> throw new IllegalArgumentException("Unknown request path");
             }
-            case "/audit" -> processAudit(resp);
-            default -> sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST,
-                "Unknown request path");
-        }
-    }
-
-    private void processRights(HttpServletResponse resp, AuthoritiesDTOReqst authorities) {
-        try {
-            String action = authorities.getAction();
-            switch (action) {
-                case AppConstants.UPGRADE -> setAuthorities(authorities.getUsername());
-                case AppConstants.DOWNGRADE -> deleteAuthorities(authorities.getUsername());
-                default -> throw new NotValidException("Incorrect action (upgrade or downgrade)");
-            }
-            List<UserDTOResp> users = getAllUsers();
-            sandler.sendSuccessResponse(resp,
-                new CommonResp<>(HttpServletResponse.SC_OK, "all users", LocalDateTime.now(),
-                    users));
-        } catch (NotValidException | CanNotDoException e) {
+        } catch (IllegalArgumentException | NotFoundException | NotValidException |
+                 CanNotDoException | JWTException e) {
             sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        } catch (ForbiddenException e) {
+            sandler.sendErrorResponse(resp, HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (ProblemWithSQLException e) {
             sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                 e.getMessage());
+        } catch (Exception e) {
+            sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                "An unexpected error occurred");
         }
     }
 
-    private void processAudit(HttpServletResponse resp) {
-        try {
-            List<Audit> audits = getAudit();
-            List<AuditDTOResp> auditDTO = auditMapper.convertToAuditDTOList(audits);
-            sandler.sendSuccessResponse(resp,
-                new CommonResp<>(HttpServletResponse.SC_OK, "get system audit", LocalDateTime.now(),
-                    auditDTO));
-        } catch (ProblemWithSQLException e) {
-            sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                e.getMessage());
+    private void processRights(HttpServletResponse resp, AuthoritiesDTOReqst authorities)
+        throws NotValidException, CanNotDoException, ProblemWithSQLException {
+        String action = authorities.getAction();
+        switch (action) {
+            case AppConstants.UPGRADE -> setAuthorities(authorities.getUsername());
+            case AppConstants.DOWNGRADE -> deleteAuthorities(authorities.getUsername());
+            default -> throw new NotValidException("Incorrect action (upgrade or downgrade)");
         }
+        List<UserDTOResp> users = getAllUsers();
+        sandler.sendSuccessResponse(resp,
+            new CommonResp<>(HttpServletResponse.SC_OK, "all users", LocalDateTime.now(), users));
     }
 
-    private Person validateToken(HttpServletResponse resp, String token) {
-        try {
-            return jwtService.validate(token);
-        } catch (NotFoundException | JWTException e) {
-            sandler.sendErrorResponse(resp, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
-        } catch (ProblemWithSQLException e) {
-            sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                e.getMessage());
-        }
-        return null;
+    private void processAudit(HttpServletResponse resp) throws ProblemWithSQLException {
+        List<Audit> audits = getAudit();
+        List<AuditDTOResp> auditDTO = auditMapper.convertToAuditDTOList(audits);
+        sandler.sendSuccessResponse(resp,
+            new CommonResp<>(HttpServletResponse.SC_OK, "get system audit", LocalDateTime.now(),
+                auditDTO));
     }
 }
