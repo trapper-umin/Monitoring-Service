@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import monitoring.service.dev.common.SensorType;
+import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.controllers.interfaces.IDoController;
 import monitoring.service.dev.dtos.ReadingDTO;
 import monitoring.service.dev.dtos.SensorDTO;
@@ -41,9 +42,8 @@ import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 import monitoring.service.dev.utils.mappers.HistoryMapper;
 import monitoring.service.dev.utils.mappers.PersonMapper;
 import org.mapstruct.factory.Mappers;
-import monitoring.service.dev.config.AppConstants;
 
-@WebServlet("/do/*")
+@WebServlet("/api/v1/readings/*")
 public class ImplDoController extends HttpServlet implements IDoController {
 
     private final JWTService jwtService;
@@ -103,7 +103,7 @@ public class ImplDoController extends HttpServlet implements IDoController {
         try {
             String token = jwtService.extractToken(req);
             Person person = jwtService.validate(token);
-            if(!req.getPathInfo().equals(AppConstants.COMMAND_SUBMIT)){
+            if (!req.getPathInfo().equals(AppConstants.COMMAND_SUBMIT)) {
                 throw new IllegalArgumentException("Unknown request path");
             }
             SensorReadingReqst readingRequest = jackson.readValue(req.getInputStream(),
@@ -118,7 +118,8 @@ public class ImplDoController extends HttpServlet implements IDoController {
                 .username(person.getUsername()).build());
 
             resp.setStatus(HttpServletResponse.SC_OK);
-        } catch (IllegalArgumentException | NotFoundException | NotValidException | IOException e) {
+        } catch (IllegalArgumentException | NotFoundException | NotValidException | JWTException |
+                 IOException e) {
             sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (ProblemWithSQLException e) {
             sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -138,12 +139,15 @@ public class ImplDoController extends HttpServlet implements IDoController {
             String path = req.getPathInfo();
             CredentialsDTOReqst credentials = personMapper.convertToCredentialsDTOReqst(person);
             switch (path) {
-                case AppConstants.COMMAND_CURRENT -> processCurrentReadings(resp, credentials, person);
-                case AppConstants.COMMAND_GET_MONTHLY -> processMonthlyReadings(req, resp, credentials, person);
+                case AppConstants.COMMAND_CURRENT ->
+                    processCurrentReadings(resp, credentials, person);
+                case AppConstants.COMMAND_GET_MONTHLY ->
+                    processMonthlyReadings(req, resp, credentials, person);
                 case AppConstants.COMMAND_HISTORY -> processHistory(resp, credentials);
                 default -> throw new IllegalArgumentException("Unknown request path");
             }
-        } catch (IllegalArgumentException | NotFoundException | NotValidException | JWTException e) {
+        } catch (IllegalArgumentException | NotFoundException | NotValidException |
+                 JWTException e) {
             sandler.sendErrorResponse(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (ProblemWithSQLException e) {
             sandler.sendErrorResponse(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -189,7 +193,7 @@ public class ImplDoController extends HttpServlet implements IDoController {
 
     private CredentialsDTOWithSensorReqst mapPersonToCredentialsWithSensor(Person person,
         SensorReadingReqst request) throws IllegalArgumentException {
-        if(request.getMonth().isEmpty() || request.getYear().isEmpty()){
+        if (request.getMonth().isEmpty() || request.getYear().isEmpty()) {
             throw new IllegalArgumentException("Some parameters are empty");
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM-yyyy", Locale.ENGLISH);

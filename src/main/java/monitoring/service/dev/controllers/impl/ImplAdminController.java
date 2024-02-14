@@ -34,7 +34,7 @@ import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 import monitoring.service.dev.utils.mappers.AuditMapper;
 import org.mapstruct.factory.Mappers;
 
-@WebServlet("/admin/*")
+@WebServlet("/api/v1/admins/*")
 public class ImplAdminController extends HttpServlet implements IAdminController {
 
     private final AdminService adminService;

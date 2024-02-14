@@ -22,7 +22,7 @@ import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 
-@WebServlet("/auth/*")
+@WebServlet("/api/v1/users/*")
 public class ImplAuthController extends HttpServlet implements IAuthController {
 
     private final AuthService service;
