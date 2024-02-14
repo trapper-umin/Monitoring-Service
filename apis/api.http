@@ -19,7 +19,7 @@ Content-Type: application/json
 ###SUBMIT
 POST http://localhost:8080/api/v1/readings/submit
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQyOTg0LCJleHAiOjE3MDc5NDY1ODR9.gtXhMbSLP7VTuhK-9cM1RTrCeDtWombheq72HQGkQI8
+Authorization: Bearer {{token}}
 
 {
   "sensor": "HOT",
@@ -32,22 +32,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQyO
 ###GET CURRENT READINGS
 GET http://localhost:8080/api/v1/readings/current
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQyOTg0LCJleHAiOjE3MDc5NDY1ODR9.gtXhMbSLP7VTuhK-9cM1RTrCeDtWombheq72HQGkQI8
+Authorization: Bearer {{token}}
 
 ###GET MONTHLY READINGS
 GET http://localhost:8080/api/v1/readings/monthly?month=January&year=2018
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQyOTg0LCJleHAiOjE3MDc5NDY1ODR9.gtXhMbSLP7VTuhK-9cM1RTrCeDtWombheq72HQGkQI8
+Authorization: Bearer {{token}}
 
 ###HISTORY
 GET http://localhost:8080/api/v1/readings/history
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQyOTg0LCJleHAiOjE3MDc5NDY1ODR9.gtXhMbSLP7VTuhK-9cM1RTrCeDtWombheq72HQGkQI8
+Authorization: Bearer {{token}}
 
 ###RIGHTS
 POST http://localhost:8080/api/v1/admins/rights
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQzNTgxLCJleHAiOjE3MDc5NDcxODF9.nnWHCIXz-Wxm3Clddcj5HYpur0Bnr20hEd4QONrsdBU
+Authorization: Bearer {{token}}
 
 {
   "username": "root",
@@ -57,4 +57,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQzN
 ###AUDIT
 GET http://localhost:8080/api/v1/admins/audit
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb290IiwiaWF0IjoxNzA3OTQzNTgxLCJleHAiOjE3MDc5NDcxODF9.nnWHCIXz-Wxm3Clddcj5HYpur0Bnr20hEd4QONrsdBU
+Authorization: Bearer {{token}}
