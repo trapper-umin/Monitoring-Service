@@ -1,5 +1,5 @@
 ###REGISTRATION
-POST http://localhost:8080/api/v1/users/register
+POST {{url}}/api/v1/users/register
 Content-Type: application/json
 
 {
@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ###AUTHENTICATION
-POST http://localhost:8080/api/v1/users/authenticate
+POST {{url}}/api/v1/users/authenticate
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ###SUBMIT
-POST http://localhost:8080/api/v1/readings/submit
+POST {{url}}/api/v1/readings/submit
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -28,24 +28,23 @@ Authorization: Bearer {{token}}
   "year": "2020"
 }
 
-
 ###GET CURRENT READINGS
-GET http://localhost:8080/api/v1/readings/current
+GET {{url}}/api/v1/readings/current
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###GET MONTHLY READINGS
-GET http://localhost:8080/api/v1/readings/monthly?month=January&year=2018
+GET {{url}}/api/v1/readings/monthly?month=January&year=2018
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###HISTORY
-GET http://localhost:8080/api/v1/readings/history
+GET {{url}}/api/v1/readings/history
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###RIGHTS
-POST http://localhost:8080/api/v1/admins/rights
+POST {{url}}/api/v1/admins/rights
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -55,6 +54,6 @@ Authorization: Bearer {{token}}
 }
 
 ###AUDIT
-GET http://localhost:8080/api/v1/admins/audit
+GET {{url}}/api/v1/admins/audit
 Content-Type: application/json
 Authorization: Bearer {{token}}
