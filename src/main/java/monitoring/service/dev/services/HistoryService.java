@@ -1,7 +1,8 @@
 package monitoring.service.dev.services;
 
 import java.util.List;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.History;
 import monitoring.service.dev.repositories.IHistoryRepository;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
@@ -22,7 +23,7 @@ public class HistoryService {
         }
     }
 
-    public List<History> get(CredentialsDTO credentials) {
+    public List<History> get(CredentialsDTOReqst credentials) {
         return repository.get(credentials);
     }
 }

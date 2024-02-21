@@ -19,7 +19,7 @@ import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 
 public class ReadingsRepository implements IReadingsRepository {
 
-    private static final PeopleRepository peopleRepository = new PeopleRepository(); //TODO
+    private static final PeopleRepository peopleRepository = new PeopleRepository();
     private static final String GET_CURRENT_READINGS_QUERY = """
         SELECT
             s.type AS sensor_type,
@@ -61,7 +61,7 @@ public class ReadingsRepository implements IReadingsRepository {
         """;
 
     private static final String USE_FUNC_SAVE_SENSOR_READING_QUERY = """
-        SELECT save_sensor_reading(?, ?, ?, ?);
+        SELECT liquibase.save_sensor_reading(?, ?, ?, ?);
         """;
 
     /**

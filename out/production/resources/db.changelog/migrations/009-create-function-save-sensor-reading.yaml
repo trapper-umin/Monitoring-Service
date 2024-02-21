@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-create-function-save-sensor-reading
+      author: trapper
+      changes:
+        - sql:
+            dbms: postgresql
+            splitStatements: true
+            stripComments: true
+            endDelimiter: $$
+            sql: |
+              CREATE OR REPLACE FUNCTION save_sensor_reading(
+                  p_person_id INT,
+                  p_sensor_type VARCHAR,
+                  p_indication FLOAT8,
+                  p_date TIMESTAMP
+              ) RETURNS VOID AS $$
+              DECLARE
+                  v_sensor_id INT;
+              BEGIN
+                  SELECT sensor_id INTO v_sensor_id FROM sensor
+                  WHERE person_id = p_person_id AND type = p_sensor_type;
+              
+                  IF NOT FOUND THEN
+                      INSERT INTO sensor (person_id, type)
+                      VALUES (p_person_id, p_sensor_type)
+                      RETURNING sensor_id INTO v_sensor_id;
+              
+                      INSERT INTO reading (sensor_id, indication, date)
+                      VALUES (v_sensor_id, p_indication, p_date);
+                  ELSE
+                      IF NOT EXISTS (
+                          SELECT 1 FROM reading
+                          WHERE sensor_id = v_sensor_id
+                          AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM p_date)
+                          AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM p_date)
+                      ) THEN
+                          INSERT INTO reading (sensor_id, indication, date)
+                          VALUES (v_sensor_id, p_indication, p_date);
+                      END IF;
+                  END IF;
+              END;
+              $$ LANGUAGE plpgsql;

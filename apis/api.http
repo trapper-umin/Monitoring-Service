@@ -1,0 +1,59 @@
+###REGISTRATION
+POST {{url}}/api/v1/users/register
+Content-Type: application/json
+
+{
+  "username": "root",
+  "password": "root"
+}
+
+###AUTHENTICATION
+POST {{url}}/api/v1/users/authenticate
+Content-Type: application/json
+
+{
+  "username": "root",
+  "password": "root"
+}
+
+###SUBMIT
+POST {{url}}/api/v1/readings/submit
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "sensor": "HOT",
+  "indication": 2.55,
+  "month": "January",
+  "year": "2020"
+}
+
+###GET CURRENT READINGS
+GET {{url}}/api/v1/readings/current
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###GET MONTHLY READINGS
+GET {{url}}/api/v1/readings/monthly?month=January&year=2018
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###HISTORY
+GET {{url}}/api/v1/readings/history
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###RIGHTS
+POST {{url}}/api/v1/admins/rights
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "username": "root",
+  "action": "upgrade"
+}
+
+###AUDIT
+GET {{url}}/api/v1/admins/audit
+Content-Type: application/json
+Authorization: Bearer {{token}}

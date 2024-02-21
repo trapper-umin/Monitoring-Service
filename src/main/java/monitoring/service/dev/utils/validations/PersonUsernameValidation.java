@@ -1,13 +1,15 @@
 package monitoring.service.dev.utils.validations;
 
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
-import monitoring.service.dev.repositories.localstorage.PeopleRepository;
+import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
+import monitoring.service.dev.repositories.IPeopleRepository;
+import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.validations.common.IValidator;
 
 import java.util.Objects;
 
-public class PersonUsernameValidation implements IValidator<CredentialsDTO> {
+public class PersonUsernameValidation implements IValidator<CredentialsDTOReqst> {
 
     private static PersonUsernameValidation instance;
 
@@ -21,9 +23,9 @@ public class PersonUsernameValidation implements IValidator<CredentialsDTO> {
         return instance;
     }
 
-    PeopleRepository peopleRepository = PeopleRepository.getInstance();
+    IPeopleRepository peopleRepository = new PeopleRepository();
 
-    public void valid(CredentialsDTO credentials) {
+    public void valid(CredentialsDTOReqst credentials) {
         String username = credentials.getUsername();
 
         Objects.requireNonNull(username, "username should not be null");

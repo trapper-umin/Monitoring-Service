@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-create-history-table
+      author: trapper
+      changes:
+        - createTable:
+            tableName: history
+            columns:
+              - column:
+                  name: history_id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: action
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: timestamp
+                  constraints:
+                    nullable: false

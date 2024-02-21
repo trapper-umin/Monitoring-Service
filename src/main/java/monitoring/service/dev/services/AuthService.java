@@ -2,7 +2,8 @@ package monitoring.service.dev.services;
 
 import java.util.ArrayList;
 import monitoring.service.dev.common.Role;
-import monitoring.service.dev.dtos.requests.CredentialsDTO;
+import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
+import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IPeopleRepository;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
@@ -30,7 +31,7 @@ public class AuthService {
      * @return The newly created Person object with registered details.
      * @throws NotValidException if the provided credentials do not meet the validation criteria.
      */
-    public Person registration(CredentialsDTO credentials) {
+    public Person registration(CredentialsDTOReqst credentials) {
 
         String username = credentials.getUsername();
         usernameValidation.valid(credentials);
@@ -44,7 +45,7 @@ public class AuthService {
         return repository.registration(person);
     }
 
-    public Person authentication(CredentialsDTO credentials) {
+    public Person authentication(CredentialsDTOReqst credentials) {
 
         String username = credentials.getUsername();
         Person person = repository.findByUsername(username).orElseThrow(

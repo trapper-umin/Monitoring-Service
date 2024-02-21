@@ -1,6 +1,6 @@
 package monitoring.service.dev.utils.mappers;
 
-import monitoring.service.dev.dtos.MeterReadingDTO;
+import monitoring.service.dev.dtos.ReadingDTO;
 import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.models.Reading;
 import monitoring.service.dev.models.Sensor;
@@ -14,17 +14,17 @@ import java.util.Map;
 public interface SensorAndMeterReadingMapMapper {
 
     SensorMapper sensorMapper = Mappers.getMapper(SensorMapper.class);
-    MeterReadingMapper meterReadingMapper = Mappers.getMapper(MeterReadingMapper.class);
+    ReadingMapper READING_MAPPER = Mappers.getMapper(ReadingMapper.class);
 
-    default Map<SensorDTO, MeterReadingDTO> convertToDtoMap(Map<Sensor, Reading> entity) {
+    default Map<SensorDTO, ReadingDTO> convertToDtoMap(Map<Sensor, Reading> entity) {
         if (entity == null) {
             return null;
         }
 
-        Map<SensorDTO, MeterReadingDTO> dto = new HashMap<>();
+        Map<SensorDTO, ReadingDTO> dto = new HashMap<>();
         for (Map.Entry<Sensor, Reading> entry : entity.entrySet()) {
             dto.put(sensorMapper.convertToSensorDTO(entry.getKey()),
-                meterReadingMapper.convertToMeterReadingDTO(entry.getValue()));
+                READING_MAPPER.convertToMeterReadingDTO(entry.getValue()));
         }
 
         return dto;

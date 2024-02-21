@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-create-schema-for-liquibase
+      author: trapper
+      changes:
+        - sql: ALTER TABLE public.databasechangelog SET SCHEMA liquibase;
+        - sql: ALTER TABLE public.databasechangeloglock SET SCHEMA liquibase;
