@@ -16,7 +16,9 @@ import monitoring.service.dev.models.Reading;
 import monitoring.service.dev.models.Sensor;
 import monitoring.service.dev.repositories.IReadingsRepository;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ReadingsRepository implements IReadingsRepository {
 
     private static final PeopleRepository peopleRepository = new PeopleRepository();

@@ -1,9 +1,10 @@
-package monitoring.service.dev.controllers.interfaces;
+package monitoring.service.dev.controllers.v1.interfaces;
 
 import java.util.List;
 import monitoring.service.dev.dtos.responses.UserDTOResp;
 import monitoring.service.dev.models.Audit;
 
+@Deprecated
 public interface IAdminController {
 
     List<UserDTOResp> getAllUsers();

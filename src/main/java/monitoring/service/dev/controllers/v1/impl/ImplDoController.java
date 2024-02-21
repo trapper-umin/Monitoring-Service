@@ -1,4 +1,4 @@
-package monitoring.service.dev.controllers.impl;
+package monitoring.service.dev.controllers.v1.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import monitoring.service.dev.common.SensorType;
 import monitoring.service.dev.config.AppConstants;
-import monitoring.service.dev.controllers.interfaces.IDoController;
+import monitoring.service.dev.controllers.v1.interfaces.IDoController;
 import monitoring.service.dev.dtos.ReadingDTO;
 import monitoring.service.dev.dtos.SensorDTO;
 import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
 import monitoring.service.dev.dtos.requests.CredentialsDTOWithSensorReqst;
 import monitoring.service.dev.dtos.requests.SensorDTOWithOneReadingReqst;
 import monitoring.service.dev.dtos.requests.SensorReadingReqst;
-import monitoring.service.dev.dtos.responses.CommonResp;
+import monitoring.service.dev.dtos.responses.WrapperResp;
 import monitoring.service.dev.dtos.responses.HistoryDTOResp;
 import monitoring.service.dev.dtos.responses.PersonWithSensorsAndReadingsDTOResp;
 import monitoring.service.dev.models.History;
@@ -31,9 +31,9 @@ import monitoring.service.dev.out.Sandler;
 import monitoring.service.dev.repositories.jdbc.HistoryRepository;
 import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 import monitoring.service.dev.repositories.jdbc.ReadingsRepository;
-import monitoring.service.dev.services.DoService;
-import monitoring.service.dev.services.HistoryService;
-import monitoring.service.dev.services.JWTService;
+import monitoring.service.dev.services.db.DoService;
+import monitoring.service.dev.services.db.HistoryService;
+import monitoring.service.dev.services.db.JWTService;
 import monitoring.service.dev.utils.annotations.DoAudit;
 import monitoring.service.dev.utils.exceptions.JWTException;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
@@ -43,6 +43,7 @@ import monitoring.service.dev.utils.mappers.HistoryMapper;
 import monitoring.service.dev.utils.mappers.PersonMapper;
 import org.mapstruct.factory.Mappers;
 
+@Deprecated
 @WebServlet("/api/v1/readings/*")
 public class ImplDoController extends HttpServlet implements IDoController {
 
@@ -186,7 +187,7 @@ public class ImplDoController extends HttpServlet implements IDoController {
 
         List<History> histories = getHistory(credentials);
         List<HistoryDTOResp> historiesDTO = historyMapper.convertToHistoryDTOList(histories);
-        sandler.sendSuccessResponse(resp, new CommonResp<>(HttpServletResponse.SC_OK,
+        sandler.sendSuccessResponse(resp, new WrapperResp<>(HttpServletResponse.SC_OK,
             "histories of submitting for " + credentials.getUsername(), LocalDateTime.now(),
             historiesDTO));
     }

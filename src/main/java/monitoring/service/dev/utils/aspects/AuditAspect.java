@@ -3,7 +3,7 @@ package monitoring.service.dev.utils.aspects;
 import monitoring.service.dev.models.Audit;
 import monitoring.service.dev.repositories.IAuditRepository;
 import monitoring.service.dev.repositories.jdbc.AuditRepository;
-import monitoring.service.dev.services.AuditService;
+import monitoring.service.dev.services.db.AuditService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;

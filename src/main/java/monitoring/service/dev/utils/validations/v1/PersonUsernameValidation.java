@@ -1,7 +1,6 @@
-package monitoring.service.dev.utils.validations;
+package monitoring.service.dev.utils.validations.v1;
 
 import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
-import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.repositories.IPeopleRepository;
 import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 import monitoring.service.dev.utils.exceptions.NotValidException;

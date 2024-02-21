@@ -1,14 +1,14 @@
 ###REGISTRATION
-POST {{url}}/api/v1/users/register
+POST {{url}}/api/v2/users/register
 Content-Type: application/json
 
 {
-  "username": "root",
-  "password": "root"
+  "username": "trapper123",
+  "password": "trapper"
 }
 
 ###AUTHENTICATION
-POST {{url}}/api/v1/users/authenticate
+POST {{url}}/api/v2/users/authenticate
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ###SUBMIT
-POST {{url}}/api/v1/readings/submit
+POST {{url}}/api/v2/readings/submit
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -29,31 +29,31 @@ Authorization: Bearer {{token}}
 }
 
 ###GET CURRENT READINGS
-GET {{url}}/api/v1/readings/current
+GET {{url}}/api/v2/readings/current
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###GET MONTHLY READINGS
-GET {{url}}/api/v1/readings/monthly?month=January&year=2018
+GET {{url}}/api/v2/readings/monthly?month=January&year=2018
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###HISTORY
-GET {{url}}/api/v1/readings/history
+GET {{url}}/api/v2/readings/history
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###RIGHTS
-POST {{url}}/api/v1/admins/rights
+POST {{url}}/api/v2/admins/rights
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "username": "root",
+  "username": "trapper123",
   "action": "upgrade"
 }
 
 ###AUDIT
-GET {{url}}/api/v1/admins/audit
+GET {{url}}/api/v2/admins/audit
 Content-Type: application/json
 Authorization: Bearer {{token}}

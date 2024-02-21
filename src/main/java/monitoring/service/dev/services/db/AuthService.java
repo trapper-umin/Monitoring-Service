@@ -1,16 +1,18 @@
-package monitoring.service.dev.services;
+package monitoring.service.dev.services.db;
 
 import java.util.ArrayList;
 import monitoring.service.dev.common.Role;
 import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
-import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IPeopleRepository;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
-import monitoring.service.dev.utils.validations.PersonPasswordValidation;
-import monitoring.service.dev.utils.validations.PersonUsernameValidation;
+import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
+import monitoring.service.dev.utils.validations.v1.PersonPasswordValidation;
+import monitoring.service.dev.utils.validations.v1.PersonUsernameValidation;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthService {
 
     private static final PersonUsernameValidation usernameValidation = PersonUsernameValidation.getInstance();
@@ -31,25 +33,20 @@ public class AuthService {
      * @return The newly created Person object with registered details.
      * @throws NotValidException if the provided credentials do not meet the validation criteria.
      */
-    public Person registration(CredentialsDTOReqst credentials) {
-
+    public Person registration(CredentialsDTOReqst credentials) throws ProblemWithSQLException {
         String username = credentials.getUsername();
-        usernameValidation.valid(credentials);
-
         String password = credentials.getPassword();
-        passwordValidation.valid(credentials);
-
         Person person = Person.builder().username(username).password(password)
             .sensors(new ArrayList<>()).role(Role.USER).build();
 
         return repository.registration(person);
     }
 
-    public Person authentication(CredentialsDTOReqst credentials) {
-
+    public Person authentication(CredentialsDTOReqst credentials) throws ProblemWithSQLException,
+            NotFoundException, NotValidException{
         String username = credentials.getUsername();
         Person person = repository.findByUsername(username).orElseThrow(
-            () -> new NotFoundException("user with username '" + username + "' was not found"));
+            () -> new NotFoundException(username + "not found"));
 
         String password = credentials.getPassword();
         if (!password.equals(person.getPassword())) {

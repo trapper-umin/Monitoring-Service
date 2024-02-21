@@ -1,4 +1,4 @@
-package monitoring.service.dev.controllers.impl;
+package monitoring.service.dev.controllers.v1.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import monitoring.service.dev.common.Role;
 import monitoring.service.dev.config.AppConstants;
-import monitoring.service.dev.controllers.interfaces.IAdminController;
+import monitoring.service.dev.controllers.v1.interfaces.IAdminController;
 import monitoring.service.dev.dtos.requests.AuthoritiesDTOReqst;
 import monitoring.service.dev.dtos.responses.AuditDTOResp;
-import monitoring.service.dev.dtos.responses.CommonResp;
+import monitoring.service.dev.dtos.responses.WrapperResp;
 import monitoring.service.dev.dtos.responses.UserDTOResp;
 import monitoring.service.dev.models.Audit;
 import monitoring.service.dev.models.Person;
@@ -21,9 +21,9 @@ import monitoring.service.dev.out.Sandler;
 import monitoring.service.dev.repositories.jdbc.AdminRepository;
 import monitoring.service.dev.repositories.jdbc.AuditRepository;
 import monitoring.service.dev.repositories.jdbc.PeopleRepository;
-import monitoring.service.dev.services.AdminService;
-import monitoring.service.dev.services.AuditService;
-import monitoring.service.dev.services.JWTService;
+import monitoring.service.dev.services.db.AdminService;
+import monitoring.service.dev.services.db.AuditService;
+import monitoring.service.dev.services.db.JWTService;
 import monitoring.service.dev.utils.annotations.DoAudit;
 import monitoring.service.dev.utils.exceptions.CanNotDoException;
 import monitoring.service.dev.utils.exceptions.ForbiddenException;
@@ -34,6 +34,7 @@ import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 import monitoring.service.dev.utils.mappers.AuditMapper;
 import org.mapstruct.factory.Mappers;
 
+@Deprecated
 @WebServlet("/api/v1/admins/*")
 public class ImplAdminController extends HttpServlet implements IAdminController {
 
@@ -46,8 +47,7 @@ public class ImplAdminController extends HttpServlet implements IAdminController
 
     public ImplAdminController() {
         PeopleRepository peopleRepository = new PeopleRepository();
-        AdminRepository adminRepository = new AdminRepository(AppConstants.JDBC_URL,
-            AppConstants.JDBC_USERNAME, AppConstants.JDBC_PASSWORD);
+        AdminRepository adminRepository = new AdminRepository();
         AuditRepository auditRepository = new AuditRepository();
         this.adminService = new AdminService(peopleRepository, adminRepository);
         this.auditService = new AuditService(auditRepository);
@@ -83,7 +83,6 @@ public class ImplAdminController extends HttpServlet implements IAdminController
 
     @Override
     public void postAudit(Audit audit) {
-        auditService.postAudit(audit);
     }
 
     @Override
@@ -109,7 +108,7 @@ public class ImplAdminController extends HttpServlet implements IAdminController
                     try {
                         AuthoritiesDTOReqst authorities = jackson.readValue(req.getInputStream(),
                             AuthoritiesDTOReqst.class);
-                        if(authorities.getUsername().equals(person.getUsername())){
+                        if (authorities.getUsername().equals(person.getUsername())) {
                             throw new IllegalArgumentException("You can't change your authorities");
                         }
                         processRights(resp, authorities);
@@ -144,14 +143,14 @@ public class ImplAdminController extends HttpServlet implements IAdminController
         }
         List<UserDTOResp> users = getAllUsers();
         sandler.sendSuccessResponse(resp,
-            new CommonResp<>(HttpServletResponse.SC_OK, "all users", LocalDateTime.now(), users));
+            new WrapperResp<>(HttpServletResponse.SC_OK, "all users", LocalDateTime.now(), users));
     }
 
     private void processAudit(HttpServletResponse resp) throws ProblemWithSQLException {
         List<Audit> audits = getAudit();
         List<AuditDTOResp> auditDTO = auditMapper.convertToAuditDTOList(audits);
         sandler.sendSuccessResponse(resp,
-            new CommonResp<>(HttpServletResponse.SC_OK, "get system audit", LocalDateTime.now(),
+            new WrapperResp<>(HttpServletResponse.SC_OK, "get system audit", LocalDateTime.now(),
                 auditDTO));
     }
 }

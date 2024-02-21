@@ -12,7 +12,7 @@ import monitoring.service.dev.dtos.common.CommonDTO;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenDTOResp implements CommonDTO {
+public class ErrorWithOneFieldMessage implements CommonDTO {
 
-    private String token;
+    private String error;
 }

@@ -1,4 +1,4 @@
-package monitoring.service.dev.utils.validations;
+package monitoring.service.dev.utils.validations.v1;
 
 import monitoring.service.dev.dtos.ReadingDTO;
 import monitoring.service.dev.utils.exceptions.NotValidException;

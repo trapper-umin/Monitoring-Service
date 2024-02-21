@@ -1,4 +1,4 @@
-package monitoring.service.dev.controllers.interfaces;
+package monitoring.service.dev.controllers.v1.interfaces;
 
 import java.util.List;
 import monitoring.service.dev.dtos.SensorDTO;
@@ -6,6 +6,7 @@ import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
 import monitoring.service.dev.dtos.requests.CredentialsDTOWithSensorReqst;
 import monitoring.service.dev.models.History;
 
+@Deprecated
 public interface IDoController {
 
     List<SensorDTO> getCurrentReadings(CredentialsDTOReqst credentials);

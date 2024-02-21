@@ -1,4 +1,4 @@
-package monitoring.service.dev.controllers.impl;
+package monitoring.service.dev.controllers.v1.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -7,21 +7,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import monitoring.service.dev.config.AppConstants;
-import monitoring.service.dev.controllers.interfaces.IAuthController;
+import monitoring.service.dev.controllers.v1.interfaces.IAuthController;
 import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
 import monitoring.service.dev.dtos.responses.TokenDTOResp;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.out.Sandler;
 import monitoring.service.dev.repositories.IPeopleRepository;
 import monitoring.service.dev.repositories.jdbc.PeopleRepository;
-import monitoring.service.dev.services.AuthService;
-import monitoring.service.dev.services.JWTService;
+import monitoring.service.dev.services.db.AuthService;
+import monitoring.service.dev.services.db.JWTService;
 import monitoring.service.dev.utils.annotations.DoAudit;
 import monitoring.service.dev.utils.annotations.SpeedTest;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 
+@Deprecated
 @WebServlet("/api/v1/users/*")
 public class ImplAuthController extends HttpServlet implements IAuthController {
 

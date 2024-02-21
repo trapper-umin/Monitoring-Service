@@ -1,8 +1,5 @@
 package monitoring.service.dev.dtos.responses;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,14 +12,9 @@ import monitoring.service.dev.dtos.common.CommonDTO;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommonResp<E extends CommonDTO>{
+public class ValidationErrorsDTO implements CommonDTO {
 
-    private int status;
+    private String field;
 
     private String message;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime time;
-
-    private List<E> body;
 }
