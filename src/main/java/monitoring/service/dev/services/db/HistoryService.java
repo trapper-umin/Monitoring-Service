@@ -4,6 +4,7 @@ import java.util.List;
 import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
 import monitoring.service.dev.models.History;
 import monitoring.service.dev.repositories.IHistoryRepository;
+import monitoring.service.dev.repositories.jdbc.HistoryRepository;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ public class HistoryService {
 
     private final IHistoryRepository repository;
 
-    public HistoryService(IHistoryRepository repository) {
+    public HistoryService(HistoryRepository repository) {
         this.repository = repository;
     }
 

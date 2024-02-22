@@ -5,6 +5,7 @@ import monitoring.service.dev.common.Role;
 import monitoring.service.dev.dtos.requests.CredentialsDTOReqst;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IPeopleRepository;
+import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
@@ -14,12 +15,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-
-    private static final PersonUsernameValidation usernameValidation = PersonUsernameValidation.getInstance();
-    private static final PersonPasswordValidation passwordValidation = PersonPasswordValidation.getInstance();
     private final IPeopleRepository repository;
 
-    public AuthService(IPeopleRepository repository) {
+    public AuthService(PeopleRepository repository) {
         this.repository = repository;
     }
 

@@ -33,6 +33,7 @@ public class AdminLogicService {
 
     public AdminLogicService(JWTService jwtService, AdminService adminService,
         AuditService auditService, AuditMapper auditMapper) {
+
         this.jwtService = jwtService;
         this.adminService = adminService;
         this.auditService = auditService;

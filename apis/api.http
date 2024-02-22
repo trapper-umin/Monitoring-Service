@@ -22,8 +22,8 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "sensor": "HOT",
-  "indication": 2.55,
+  "type": "HOT",
+  "reading": 1,
   "month": "January",
   "year": "2020"
 }
@@ -34,7 +34,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ###GET MONTHLY READINGS
-GET {{url}}/api/v2/readings/monthly?month=January&year=2018
+GET {{url}}/api/v2/readings/monthly?month=January&year=201
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

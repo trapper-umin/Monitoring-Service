@@ -42,7 +42,7 @@ public interface IDoController {
     @PostMapping(value = AppConstants.COMMAND_SUBMIT, produces = MediaType.APPLICATION_JSON_VALUE,
         headers = {"Authorization"})
     ResponseEntity<HttpStatus> submitReading(
-        @RequestHeader String token,
+        @RequestHeader("Authorization") String token,
         @RequestBody @Valid SubmitDTOReqst submit, BindingResult bindingResult
     );
 }

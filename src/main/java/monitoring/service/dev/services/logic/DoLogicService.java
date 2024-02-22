@@ -40,6 +40,7 @@ public class DoLogicService {
 
     public DoLogicService(JWTService jwtService, DoService doService, HistoryService historyService,
         HistoryMapper historyMapper) {
+
         this.jwtService = jwtService;
         this.doService = doService;
         this.historyService = historyService;

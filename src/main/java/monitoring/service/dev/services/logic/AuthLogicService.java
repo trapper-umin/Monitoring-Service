@@ -26,6 +26,7 @@ public class AuthLogicService {
 
     public AuthLogicService(CredentialsValidator validator, AuthService authService,
         JWTService jwtService) {
+
         this.validator = validator;
         this.authService = authService;
         this.jwtService = jwtService;

@@ -12,8 +12,13 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class AuditAspect {
 
-    private final IAuditRepository repository = new AuditRepository();
-    private final AuditService auditService = new AuditService(repository);
+    private final IAuditRepository repository;
+    private final AuditService auditService;
+
+    public AuditAspect(IAuditRepository repository, AuditService auditService) {
+        this.repository = repository;
+        this.auditService = auditService;
+    }
 
     @Pointcut("@annotation(monitoring.service.dev.utils.annotations.DoAudit)")
     public void controllersAudit() {}

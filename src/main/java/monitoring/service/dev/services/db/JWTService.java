@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IPeopleRepository;
+import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 import monitoring.service.dev.utils.exceptions.JWTException;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
@@ -18,7 +19,7 @@ public class JWTService {
 
     private final IPeopleRepository peopleRepository;
 
-    public JWTService(IPeopleRepository peopleRepository) {
+    public JWTService(PeopleRepository peopleRepository) {
         this.peopleRepository = peopleRepository;
     }
 

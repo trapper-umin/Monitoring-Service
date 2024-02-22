@@ -9,6 +9,8 @@ import monitoring.service.dev.models.Person;
 import monitoring.service.dev.models.Sensor;
 import monitoring.service.dev.repositories.IPeopleRepository;
 import monitoring.service.dev.repositories.IReadingsRepository;
+import monitoring.service.dev.repositories.jdbc.PeopleRepository;
+import monitoring.service.dev.repositories.jdbc.ReadingsRepository;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
@@ -21,14 +23,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class DoService {
 
-    private final static MeterReadingIndicationValidation indicationValidation = MeterReadingIndicationValidation.getInstance();
-    private final static SensorListMapper mapperForSensorList = Mappers.getMapper(
-        SensorListMapper.class);
-    private final static PersonMapper mapperForPerson = Mappers.getMapper(PersonMapper.class);
+    private final MeterReadingIndicationValidation indicationValidation;
+    private final SensorListMapper mapperForSensorList;
+    private final PersonMapper mapperForPerson;
     private final IPeopleRepository peopleRepository;
     private final IReadingsRepository readingRepository;
 
-    public DoService(IPeopleRepository peopleRepository, IReadingsRepository readingRepository) {
+    public DoService(MeterReadingIndicationValidation indicationValidation,
+        SensorListMapper mapperForSensorList, PersonMapper mapperForPerson, PeopleRepository peopleRepository,
+        ReadingsRepository readingRepository) {
+
+        this.indicationValidation = indicationValidation;
+        this.mapperForSensorList = mapperForSensorList;
+        this.mapperForPerson = mapperForPerson;
         this.peopleRepository = peopleRepository;
         this.readingRepository = readingRepository;
     }

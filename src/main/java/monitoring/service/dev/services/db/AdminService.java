@@ -5,6 +5,8 @@ import monitoring.service.dev.dtos.responses.UserDTOResp;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IAdminRepository;
 import monitoring.service.dev.repositories.IPeopleRepository;
+import monitoring.service.dev.repositories.jdbc.AdminRepository;
+import monitoring.service.dev.repositories.jdbc.PeopleRepository;
 import monitoring.service.dev.utils.exceptions.NotFoundException;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
 import monitoring.service.dev.utils.mappers.PersonMapper;
@@ -14,11 +16,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminService {
 
-    private static final PersonMapper pMapper = Mappers.getMapper(PersonMapper.class);
+    private final PersonMapper pMapper;
     private final IAdminRepository adminRepository;
     private final IPeopleRepository peopleRepository;
 
-    public AdminService(IPeopleRepository peopleRepository, IAdminRepository adminRepository) {
+    public AdminService(PersonMapper pMapper, PeopleRepository peopleRepository,
+        AdminRepository adminRepository) {
+
+        this.pMapper = pMapper;
         this.peopleRepository = peopleRepository;
         this.adminRepository = adminRepository;
     }

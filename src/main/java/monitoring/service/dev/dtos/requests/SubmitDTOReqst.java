@@ -31,6 +31,6 @@ public class SubmitDTOReqst implements CommonDTO {
     private String month;
 
     @NotBlank(message = "should be not blank")
-    @Pattern(regexp = "[0-9]{4}", message = "should be only numbers")
+    @Pattern(regexp = "[0-9]{4}", message = "should be only numbers (XXXX)")
     private String year;
 }
