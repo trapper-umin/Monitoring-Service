@@ -11,6 +11,8 @@ import monitoring.service.dev.dtos.responses.WrapperResp;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.services.db.AuthService;
 import monitoring.service.dev.services.db.JWTService;
+import monitoring.service.dev.utils.annotations.DoAudit;
+import monitoring.service.dev.utils.annotations.SpeedTest;
 import monitoring.service.dev.utils.validations.v2.CredentialsValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,8 @@ public class AuthLogicService {
         return createResponse(token);
     }
 
+    @SpeedTest
+    @DoAudit
     public ResponseEntity<WrapperResp<TokenDTOResp>> authentication(CredentialsDTOReqst credentials,
         BindingResult bindingResult) {
         handleErrors(bindingResult);

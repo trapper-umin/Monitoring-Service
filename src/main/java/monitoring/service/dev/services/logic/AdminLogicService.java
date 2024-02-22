@@ -15,6 +15,7 @@ import monitoring.service.dev.models.Person;
 import monitoring.service.dev.services.db.AdminService;
 import monitoring.service.dev.services.db.AuditService;
 import monitoring.service.dev.services.db.JWTService;
+import monitoring.service.dev.utils.annotations.DoAudit;
 import monitoring.service.dev.utils.exceptions.ForbiddenException;
 import monitoring.service.dev.utils.exceptions.NotValidException;
 import monitoring.service.dev.utils.mappers.AuditMapper;
@@ -40,6 +41,7 @@ public class AdminLogicService {
         this.auditMapper = auditMapper;
     }
 
+    @DoAudit
     public ResponseEntity<WrapperResp<UserDTOResp>> rights(String token,
         AuthoritiesDTOReqst authorities, BindingResult bindingResult) {
         handleErrors(bindingResult);
@@ -63,6 +65,7 @@ public class AdminLogicService {
             HttpStatus.OK);
     }
 
+    @DoAudit
     public ResponseEntity<WrapperResp<AuditDTOResp>> getAudit(String token) {
         token = jwtService.extractToken(token);
         Person person = jwtService.validate(token);
