@@ -11,7 +11,9 @@ import monitoring.service.dev.config.AppConstants;
 import monitoring.service.dev.models.Person;
 import monitoring.service.dev.repositories.IPeopleRepository;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class PeopleRepository implements IPeopleRepository {
 
     private static final String REGISTRATION_QUERY = "INSERT INTO person (username, password, role) VALUES (?, ?, ?);";

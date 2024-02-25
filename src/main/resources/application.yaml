@@ -1,0 +1,10 @@
+config:
+  jdbc:
+    url: "jdbc:postgresql://localhost:5433/monitoring-service-db"
+    username: "trapper"
+    password: "9qwe1ox"
+  liquibase:
+    default-schema: "liquibase"
+  jwt:
+    secret-key: "2915b202c10079cbb9a0b1f21b831611fb592de67ca0c7632322371c89135f84"
+    expiration-time: 3600000

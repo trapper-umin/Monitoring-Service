@@ -1,18 +1,46 @@
 package monitoring.service.dev.config;
 
-import monitoring.service.dev.utils.EnvLoader;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AppConstants {
 
-    public static final String JDBC_URL = EnvLoader.load("jdbc.url");
-    public static final String JDBC_USERNAME = EnvLoader.load("jdbc.username");
-    public static final String JDBC_PASSWORD = EnvLoader.load("jdbc.password");
-//    public static final String JDBC_URL = "jdbc:postgresql://localhost:5433/monitoring-service-db";
-//    public static final String JDBC_USERNAME = "trapper";
-//    public static final String JDBC_PASSWORD = "9qwe1ox";
-    public static final String DEFAULT_LIQUIBASE_SCHEMA = "liquibase";
-    public static final String SECRET_JWT_KEY = "2915b202c10079cbb9a0b1f21b831611fb592de67ca0c7632322371c89135f84";
-    public static final int EXPIRATION_JWT_TIME = 3600000;
+    @Value("${config.jdbc.url}")
+    private String jdbcUrl;
+
+    @Value("${config.jdbc.username}")
+    private String jdbcUsername;
+
+    @Value("${config.jdbc.password}")
+    private String jdbcPassword;
+
+    @Value("${config.liquibase.default-schema}")
+    private String defaultLiquibaseSchema;
+
+    @Value("${config.jwt.secret-key}")
+    private String secretJwtKey;
+
+    @Value("${config.jwt.expiration-time}")
+    private int expirationJwtTime;
+
+    public static String JDBC_URL;
+    public static String JDBC_USERNAME;
+    public static String JDBC_PASSWORD;
+    public static String DEFAULT_LIQUIBASE_SCHEMA;
+    public static String SECRET_JWT_KEY;
+    public static int EXPIRATION_JWT_TIME;
+
+    @PostConstruct
+    public void init() {
+        JDBC_URL = jdbcUrl;
+        JDBC_USERNAME = jdbcUsername;
+        JDBC_PASSWORD = jdbcPassword;
+        DEFAULT_LIQUIBASE_SCHEMA = defaultLiquibaseSchema;
+        SECRET_JWT_KEY = secretJwtKey;
+        EXPIRATION_JWT_TIME = expirationJwtTime;
+    }
     public static final String COMMAND_REGISTER = "/register";
     public static final String COMMAND_LOGIN = "/authenticate";
     public static final String COMMAND_EXIT = "/exit";

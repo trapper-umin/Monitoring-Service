@@ -14,7 +14,9 @@ import monitoring.service.dev.dtos.responses.CredentialsDTOResp;
 import monitoring.service.dev.models.History;
 import monitoring.service.dev.repositories.IHistoryRepository;
 import monitoring.service.dev.utils.exceptions.ProblemWithSQLException;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class HistoryRepository implements IHistoryRepository {
 
     private static final String GET_HISTORY = """

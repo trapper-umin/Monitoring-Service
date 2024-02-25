@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.HashMap;
 import java.util.Map;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SensorAndMeterReadingMapMapper {
 
     SensorMapper sensorMapper = Mappers.getMapper(SensorMapper.class);

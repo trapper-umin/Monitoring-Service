@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import monitoring.service.dev.dtos.common.CommonDTO;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenDTOResp {
+public class TokenDTOResp implements CommonDTO {
 
     private String token;
 }

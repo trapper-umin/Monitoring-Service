@@ -6,7 +6,7 @@ import monitoring.service.dev.models.Reading;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ReadingMapper {
 
     ReadingMapper INSTANCE = Mappers.getMapper(ReadingMapper.class);

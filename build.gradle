@@ -10,32 +10,72 @@ version '3.0.1'
 
 sourceCompatibility = 17
 
+ext {
+    springVersion = '6.1.3'
+    jakartaServletApiVersion = '6.0.0'
+    jakartaValidationApiVersion = '3.0.2'
+    hibernateValidatorVersion = '7.0.1.Final'
+    jakartaElApiVersion = '5.0.1'
+    jacksonVersion = '2.15.2'
+    jjwtVersion = '0.9.1'
+    aspectjVersion = '1.9.20.1'
+    springdocVersion = '2.3.0'
+    mapstructVersion = '1.5.5.Final'
+    lombokVersion = '1.18.28'
+    postgresqlVersion = '42.7.1'
+    liquibaseVersion = '4.23.0'
+    junitVersion = '5.10.0'
+    testcontainersVersion = '1.15.3'
+    mockitoVersion = '4.0.0'
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'javax.servlet:javax.servlet-api:4.0.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    aspect 'org.aspectj:aspectjrt:1.9.20.1'
-    aspect 'org.aspectj:aspectjweaver:1.9.20.1'
-    compileOnly 'org.projectlombok:lombok:1.18.28'
-    annotationProcessor 'org.projectlombok:lombok:1.18.28'
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
-    runtimeOnly 'org.postgresql:postgresql:42.7.1'
-    implementation 'org.liquibase:liquibase-core:4.23.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
-    testImplementation 'org.testcontainers:postgresql:1.15.3'
-    testImplementation 'org.testcontainers:junit-jupiter:1.15.3'
-    testImplementation 'org.mockito:mockito-core:4.0.0'
-    testImplementation 'org.mockito:mockito-inline:4.0.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:4.0.0'
+    implementation "org.springframework:spring-webmvc:${springVersion}"
+    implementation "org.springframework:spring-context:${springVersion}"
+    implementation "org.springframework:spring-beans:${springVersion}"
+    implementation "org.springframework:spring-aop:${springVersion}"
+    implementation "org.yaml:snakeyaml:2.0"
+    compileOnly "jakarta.servlet:jakarta.servlet-api:${jakartaServletApiVersion}"
+    implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
+    implementation "jakarta.annotation:jakarta.annotation-api:1.3.5"
+    implementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
+    implementation "org.hibernate.validator:hibernate-validator-annotation-processor:${hibernateValidatorVersion}"
+    implementation "jakarta.el:jakarta.el-api:${jakartaElApiVersion}"
+    implementation "javax.servlet:javax.servlet-api:4.0.1"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+    implementation "io.jsonwebtoken:jjwt:${jjwtVersion}"
+    implementation "org.aspectj:aspectjweaver:${aspectjVersion}"
+
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-api:${springdocVersion}"
+
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
+    implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+    testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "org.mockito:mockito-inline:${mockitoVersion}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
 }
 
 war {
     archiveFileName = 'Monitoring-Service.war'
+}
+
+tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.docEncoding = 'UTF-8'
 }

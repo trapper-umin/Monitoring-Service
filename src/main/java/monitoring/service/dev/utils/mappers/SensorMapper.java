@@ -6,7 +6,7 @@ import monitoring.service.dev.models.Sensor;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SensorMapper {
 
     SensorMapper INSTANCE = Mappers.getMapper(SensorMapper.class);

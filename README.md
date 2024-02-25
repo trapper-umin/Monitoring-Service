@@ -7,6 +7,7 @@
 - [Dev/task1 -> main #1 (CLI)](https://github.com/trapper-umin/Monitoring-Service/pull/2) 
 - [Dev/task2 -> main #2 (JDBC, LIQUIBASE)](https://github.com/trapper-umin/Monitoring-Service/pull/3)
 - [Dev/task3 -> main #3 (Servlet API, AOP)](https://github.com/trapper-umin/Monitoring-Service/pull/4)
+- [Dev/task4 -> main #4 (Spring)](https://github.com/trapper-umin/Monitoring-Service/pull/5)
 
 ### Stack
 - Java 17

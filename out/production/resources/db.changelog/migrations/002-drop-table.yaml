@@ -1,7 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: 002-drop-table.yaml
-      author: trapper
-      changes:
-        - dropTable:
-            tableName: person
